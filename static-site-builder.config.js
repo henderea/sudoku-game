@@ -10,9 +10,21 @@ module.exports = function(env, mode, paths) {
       // extra webpack plugins
       plugins: [],
       // webpack config overrides
-      webpack: {},
+      webpack: {
+        optimization: {
+          splitChunks: {
+            cacheGroups: {
+              boards: {
+                test: /resources\/boards\.json/,
+                name: 'boards',
+                chunks: 'all'
+              }
+            }
+          }
+        }
+      },
       // moment.js locales to keep: use null to not trim, use '' for default locale only, or a comma-separated list of locales to keep in addition to the default
-      momentLocales: null,
+      momentLocales: '',
       // the severity of the size hints warning: use false for disabling, 'warning' for warning (default; used with null), or 'error' for failing the build
       sizeHints: null,
       // the max size of the entrypoint above which webpack will warn: use null to keep the default, or specify a size with the suffix b, k, m, or g

@@ -4,6 +4,8 @@
   "description": "A sudoku game using KnockoutJS",
   "main": "",
   "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
     "prod": "yarn build && yarn serve:prod",
     "serve:prod": "serve dist",
     "serve:dev": "browser-sync start --server build --files build",
