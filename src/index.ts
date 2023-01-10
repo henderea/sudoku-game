@@ -1,5 +1,5 @@
 import './index.scss';
-import $ from 'jquery';
+// import $ from 'jquery';
 //import 'jquery-ui';
 //import _ from 'lodash';
 //import rand from 'lodash/rand';
