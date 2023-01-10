@@ -1,0 +1,53 @@
+{
+  "name": "sudoku-game",
+  "version": "1.0.0",
+  "description": "A sudoku game using KnockoutJS",
+  "main": "",
+  "scripts": {
+    "prod": "yarn build && yarn serve:prod",
+    "serve:prod": "serve dist",
+    "serve:dev": "browser-sync start --server build --files build",
+    "start": "concurrently \"sleep 5 && yarn serve:dev\" \"yarn watch\" --names \"💻,📦\" --prefix name",
+    "build": "static-site-builder build",
+    "now-build": "static-site-builder build",
+    "watch": "static-site-builder watch",
+    "clean": "rm -rf dist build",
+    "deploy": "vercel --prod -C"
+  },
+  "author": "henderea",
+  "license": "ISC",
+  "repository": "",
+  "devDependencies": {
+    "@babel/core": "^7.20.12",
+    "@babel/eslint-parser": "^7.19.1",
+    "@henderea/static-site-builder": "^1.10.3",
+    "@types/jquery": "^3.5.16",
+    "@types/lodash": "^4.14.191",
+    "browser-sync": "^2.27.11",
+    "concurrently": "^7.6.0",
+    "eslint": "^8.31.0",
+    "eslint-config-henderea": "1.0.17",
+    "eslint-plugin-import": "^2.26.0",
+    "md5": "^2.3.0",
+    "serve": "^14.1.2",
+    "vercel": "^28.11.0"
+  },
+  "dependencies": {
+    "jquery": "^3.6.3",
+    "jquery-ui": "^1.13.2",
+    "lodash": "^4.17.21"
+  },
+  "htmlMeta": {
+    "type": "",
+    "title": "",
+    "description": "",
+    "siteName": "JS Demos - henderea.com",
+    "icon": "gravatar:henderea@gmail.com",
+    "image": null,
+    "themeColor": "#000000"
+  },
+  "homepage": "/",
+  "eslintConfig": {
+    "extends": "henderea"
+  }
+}
