@@ -33,5 +33,13 @@
     "src/**/*.ts",
     "lib/**/*.ts",
     "ts-types/**/*.ts"
-  ]
+  ],
+  "ts-node": {
+    "transpileOnly": true,
+    "files": true,
+    "compilerOptions": {
+      "target": "ESNext",
+      "module": "Node16"
+    }
+  }
 }
