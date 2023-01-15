@@ -32,7 +32,26 @@ module.exports = function(env, mode, paths) {
       // the max size of assets above which webpack will warn: use null to keep the default, or specify a size with the suffix b, k, m, or g
       maxAssetSize: null,
       // extra loaders to add to the start of the list
-      extraLoaders: [],
+      extraLoaders: [
+        {
+          test: /\.tsx$/,
+          exclude: [/[/\\\\]node_modules[/\\\\]/],
+          use: [
+            require.resolve('thread-loader'),
+            {
+              loader: require.resolve('babel-loader'),
+              options: {
+                babelrc: false,
+                compact: true,
+                highlightCode: true,
+                configFile: false,
+                presets: ['@babel/preset-env', 'solid', '@babel/preset-typescript'],
+                plugins: ['@babel/plugin-syntax-dynamic-import', '@babel/plugin-proposal-class-properties', '@babel/plugin-proposal-object-rest-spread']
+              },
+            },
+          ]
+        }
+      ],
       // extra options for the HtmlWebpackPlugin
       htmlWebpackPluginOptions: {},
       // override options for postcss

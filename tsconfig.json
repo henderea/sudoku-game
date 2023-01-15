@@ -27,7 +27,9 @@
       "./ts-types"
     ],
     "allowSyntheticDefaultImports": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js"
   },
   "include": [
     "src/**/*.ts",
