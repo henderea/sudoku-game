@@ -1,0 +1,9 @@
+{
+    "editor.codeActionsOnSave": {
+        "source.fixAll": true
+    },
+    "editor.tabSize": 2,
+    "eslint.alwaysShowStatus": true,
+    "eslint.packageManager": "yarn",
+    "eslint.validate": [ "javascript", "javascriptreact", "typescript", "typescriptreact" ],
+}
