@@ -28,12 +28,14 @@
     ],
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
+    "esModuleInterop": true,
     "jsx": "preserve",
     "jsxImportSource": "solid-js"
   },
   "include": [
     "src/**/*.ts",
     "lib/**/*.ts",
+    "lib/**/*.tsx",
     "ts-types/**/*.ts"
   ],
   "ts-node": {

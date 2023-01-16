@@ -27,13 +27,9 @@ function generateAllGenericGrids(counts: DifficultyMap<number>, print = false): 
   return { easy, medium, hard };
 }
 
-// let s1 = square(1, 1);
-// let s2 = square(10, 1);
-// console.log(s1.aligns(s2), s1.value, s2.value, s1.across, s2.across, s1.down, s2.down, s1.region, s2.region);
-
 const dirname: string = __dirname;
 
-const outPath: string = path.join(dirname, '../public/boards.json');
+const outPath: string = path.join(dirname, '../resources/boards.json');
 
 const generatedGrids = generateAllGenericGrids({ easy: 500, medium: 500, hard: 500 }, true);
 
