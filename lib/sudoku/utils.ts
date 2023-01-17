@@ -79,3 +79,9 @@ export function formatTime(d: number): string {
   const ms: number = d % 1000;
   return `${h}:${zeroPad(m, 2)}:${zeroPad(s, 2)}.${zeroPad(ms, 3)}`;
 }
+
+export function formatTimeAsMinutesSeconds(millis: number): string {
+  const m: number = Math.floor(millis / (60 * 1000));
+  const s: number = Math.floor((millis / 1000) % 60);
+  return `${m}:${zeroPad(s, 2)}`;
+}
