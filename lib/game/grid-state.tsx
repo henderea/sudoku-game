@@ -136,9 +136,8 @@ export function resetBoard(full: Grid, grid: Grid) {
   });
 }
 
-export function setCellToSelectionAndAutocomplete(n: number): void {
+export function setCellToSelectionAndAutocomplete(cell: CellData): void {
   const value: number = selection.get();
-  const cell: CellData = getCell(n);
   const accepted: boolean = setCellAndAutocomplete(cell, value);
   if(!accepted) {
     cell.error.set(true);

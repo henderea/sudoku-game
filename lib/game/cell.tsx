@@ -14,7 +14,7 @@ function HintCell(props: { cell: CellData, value: number }): JSX.Element {
 export default function Cell(props: { index: number }): JSX.Element {
   const cell: Getter<CellData> = cellGetter(props.index);
   return (
-    <td classList={{ filled: cell.get().filled(), matchesSelection: cell.get().matchesSelection.get(), error: cell.get().error.get() }} onClick={[setCellToSelectionAndAutocomplete, props.index]} onTouchStart={[swipe.touchStart, cell.get()]} onTouchMove={swipe.touchMove}>
+    <td classList={{ filled: cell.get().filled(), matchesSelection: cell.get().matchesSelection.get(), error: cell.get().error.get() }} onClick={[setCellToSelectionAndAutocomplete, cell.get()]} onTouchStart={[swipe.touchStart, cell.get()]} onTouchMove={swipe.touchMove}>
       <Show when={!cell.get().filled()} fallback={cell.get().value.get()}>
         <table class="hint-table">
           <tr>
