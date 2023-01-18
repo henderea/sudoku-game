@@ -22,7 +22,7 @@ function printGrids(value: { full: string, grid: string } | undefined): void {
     console.log(`Invalid index ${index}`);
     process.exit(1);
   }
-  const { full, grid } = importGenericGrid(value.full, value.grid);
+  const { full, grid } = importGenericGrid(value);
   process.stdout.write(`FULL:\n${full.toString()}\n\nGRID (${grid.spotCount}):\n${grid.toString()}\n\n`);
 }
 

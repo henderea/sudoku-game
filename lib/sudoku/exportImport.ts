@@ -21,10 +21,10 @@ export function fromGenericGrid(grid: string, mappings: string[]) {
   return new Grid(values, false);
 }
 
-export function importGenericGrid(full: string, grid: string): { full: Grid, grid: Grid } {
+export function importGenericGrid(grids: { full: string, grid: string }): { full: Grid, grid: Grid } {
   const mappings: string[] = _shuffleCopy(numberToGeneric, 1);
   return {
-    full: fromGenericGrid(full, mappings),
-    grid: fromGenericGrid(grid, mappings)
+    full: fromGenericGrid(grids.full, mappings),
+    grid: fromGenericGrid(grids.grid, mappings)
   };
 }
