@@ -1,3 +1,7 @@
+export declare type KeysOfType<O, T> = {
+  [K in keyof O]: O[K] extends T ? K : never;
+}[keyof O];
+
 interface TimesFunc {
   (count: number): number[];
   <T>(count: number, mapper: (i: number) => T): T[];
