@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { formatTime } from '../lib/sudoku/utils';
+import { formatTime } from '../lib/util/general';
 import type { DifficultyMap, Difficulty } from '../lib/sudoku/difficulty';
 import { generateGenericGrid } from '../lib/sudoku/generate';
 

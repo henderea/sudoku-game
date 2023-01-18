@@ -1,4 +1,4 @@
-import { _rand, _times } from './utils';
+import { _rand, _times } from 'lib/util/general';
 import { toGenericGrid } from './exportImport';
 
 import { Square, square } from './Square';

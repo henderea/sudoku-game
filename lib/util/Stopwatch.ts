@@ -1,4 +1,4 @@
-import { formatTimeAsMinutesSeconds } from 'lib/sudoku/utils';
+import { formatTimeAsMinutesSeconds } from 'lib/util/general';
 
 export declare type StopwatchEvent = 'start' | 'stop' | 'reset' | 'all';
 export declare type StopwatchListener = (stopwatch: Stopwatch, event: StopwatchEvent) => void;

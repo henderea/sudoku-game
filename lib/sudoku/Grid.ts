@@ -1,6 +1,7 @@
 import type { Square } from './Square';
 
-import { _times, getRowColFromRegionSubIndex } from './utils';
+import { getRowColFromRegionSubIndex } from './utils';
+import { _times } from 'lib/util/general';
 
 export type UniquenessResult = 'unique' | 'not-unique' | 'no-solution';
 

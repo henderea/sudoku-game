@@ -1,4 +1,4 @@
-import { _shuffleCopy } from './utils';
+import { _shuffleCopy } from 'lib/util/general';
 
 import { Square, square } from './Square';
 import { Grid } from './Grid';

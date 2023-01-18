@@ -1,7 +1,8 @@
 import type { Grid } from 'lib/sudoku/Grid';
 
 import { createSignal, createMemo, batch } from 'solid-js';
-import { getAcrossFromNumber, getDownFromNumber, getRegionFromNumber, _times } from 'lib/sudoku/utils';
+import { getAcrossFromNumber, getDownFromNumber, getRegionFromNumber } from 'lib/sudoku/utils';
+import { _times } from 'lib/util/general';
 
 export interface GetAndSet<T> {
   get(): T;
