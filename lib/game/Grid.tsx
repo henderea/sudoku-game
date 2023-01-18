@@ -2,7 +2,7 @@ import type { JSX } from 'solid-js';
 
 import { Show } from 'solid-js';
 import Cell from './Cell';
-import { timer } from './Timer';
+import { timer } from './TimerDisplay';
 import { _times } from 'lib/util/general';
 
 export default function Grid(): JSX.Element {
