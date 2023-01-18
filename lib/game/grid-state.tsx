@@ -1,22 +1,15 @@
 import type { Grid } from 'lib/sudoku/Grid';
 import type { KeysOfType } from 'lib/util/general';
 import type { SwipeDir } from 'lib/util/Swipe';
+import type { GetAndSet, Getter } from './utils';
 
-import { createSignal, createMemo, batch } from 'solid-js';
+import { batch } from 'solid-js';
 import { getAcrossFromNumber, getDownFromNumber, getRegionFromNumber, getRowColFromRegionSubIndex } from 'lib/sudoku/utils';
 import { _times, timeout } from 'lib/util/general';
 import { Swipe } from 'lib/util/Swipe';
+import { getAndSet, memoGetter } from './utils';
 
 export const ERROR_TIMEOUT: number = 500;
-
-export interface GetAndSet<T> {
-  get(): T;
-  set(value: T): void;
-}
-
-export interface Getter<T> {
-  get(): T;
-}
 
 export const selection = getAndSet(0);
 
@@ -38,16 +31,6 @@ export interface CellData extends BasicCellData {
   removedHints: GetAndSet<boolean>[];
   hints: Getter<boolean[]>;
   matchesSelection: Getter<boolean>;
-}
-
-function getAndSet<T>(initialValue: T): GetAndSet<T> {
-  const [get, set] = createSignal(initialValue);
-  return { get, set };
-}
-
-function memoGetter<T>(func: () => T): Getter<T> {
-  const get = createMemo(func);
-  return { get };
 }
 
 function basicCellData(index: number): BasicCellData {
