@@ -1,9 +1,13 @@
 import type { Grid } from 'lib/sudoku/Grid';
 import type { KeysOfType } from 'lib/util/general';
+import type { SwipeDir } from 'lib/util/swipe';
 
 import { createSignal, createMemo, batch } from 'solid-js';
 import { getAcrossFromNumber, getDownFromNumber, getRegionFromNumber, getRowColFromRegionSubIndex } from 'lib/sudoku/utils';
-import { _times } from 'lib/util/general';
+import { _times, timeout } from 'lib/util/general';
+import { Swipe } from 'lib/util/swipe';
+
+export const ERROR_TIMEOUT: number = 500;
 
 export interface GetAndSet<T> {
   get(): T;
@@ -19,6 +23,7 @@ export const selection = getAndSet(0);
 interface BasicCellData {
   realValue: GetAndSet<number>;
   value: GetAndSet<number>;
+  error: GetAndSet<boolean>;
   filled: () => boolean;
   index: number;
   across: number;
@@ -48,13 +53,14 @@ function memoGetter<T>(func: () => T): Getter<T> {
 function basicCellData(index: number): BasicCellData {
   const realValue = getAndSet(0);
   const value = getAndSet(0);
+  const error = getAndSet(false);
   const filled = () => value.get() > 0;
   const across: number = getAcrossFromNumber(index);
   const down: number = getDownFromNumber(index);
   const region: number = getRegionFromNumber(index);
   const row: number = down == 9 ? 0 : down;
   const column: number = across == 9 ? 0 : across;
-  return { realValue, value, filled, index, across, down, region, row, column };
+  return { realValue, value, filled, error, index, across, down, region, row, column };
 }
 
 const basicData: BasicCellData[] = Array.from({ length: 81 }, (i: number) => basicCellData(i));
@@ -78,9 +84,15 @@ function computeHints(autoHints: boolean[], removedHints: GetAndSet<boolean>[]):
   return _times(10, (i: number) => autoHints[i] && !removedHints[i].get());
 }
 
-function getAndSetProxy<K extends KeysOfType<BasicCellData, GetAndSet<number>>>(i: number, key: K): GetAndSet<number> {
+function getAndSetProxyNumber<K extends KeysOfType<BasicCellData, GetAndSet<number>>>(i: number, key: K): GetAndSet<number> {
   const get = () => basicData[i][key].get();
   const set = (value: number) => basicData[i][key].set(value);
+  return { get, set };
+}
+
+function getAndSetProxyBoolean<K extends KeysOfType<BasicCellData, GetAndSet<boolean>>>(i: number, key: K): GetAndSet<boolean> {
+  const get = () => basicData[i][key].get();
+  const set = (value: boolean) => basicData[i][key].set(value);
   return { get, set };
 }
 
@@ -89,15 +101,16 @@ function matchesValue(value: number, currentValue: number, hints: boolean[]): bo
 }
 
 function cellData(index: number): CellData {
-  const realValue = getAndSetProxy(index, 'realValue');
-  const value = getAndSetProxy(index, 'value');
+  const realValue = getAndSetProxyNumber(index, 'realValue');
+  const value = getAndSetProxyNumber(index, 'value');
   const filled = () => basicData[index].filled();
+  const error = getAndSetProxyBoolean(index, 'error');
   const autoHints = memoGetter(() => computeAutoHints(index));
   const removedHints = _times(10, () => getAndSet(false));
   const hints = memoGetter(() => computeHints(autoHints.get(), removedHints));
   const matchesSelection = memoGetter(() => matchesValue(selection.get(), value.get(), hints.get()));
   const { across, down, region, row, column } = basicData[index];
-  return { realValue, value, filled, autoHints, removedHints, hints, matchesSelection, index, across, down, region, row, column };
+  return { realValue, value, filled, error, autoHints, removedHints, hints, matchesSelection, index, across, down, region, row, column };
 }
 
 const data: CellData[] = _times(81, (i: number) => cellData(i));
@@ -109,8 +122,6 @@ export function getCellRS(r: number, s: number): CellData {
   const [row, col] = getRowColFromRegionSubIndex(r, s);
   return getCellRC(row, col);
 }
-// const rows: CellData[][] = _times(9, (i: number) => _times(9, (j: number) => getCellRC(i, j)));
-// export function getRows(): CellData[][] { return rows; }
 
 export function resetBoard(full: Grid, grid: Grid) {
   batch(() => {
@@ -125,18 +136,27 @@ export function resetBoard(full: Grid, grid: Grid) {
   });
 }
 
-export function setCellAndAutocomplete(n: number, value: number): boolean {
+export function setCellToSelectionAndAutocomplete(n: number): void {
+  const value: number = selection.get();
+  const cell: CellData = getCell(n);
+  const accepted: boolean = setCellAndAutocomplete(cell, value);
+  if(!accepted) {
+    cell.error.set(true);
+    timeout(ERROR_TIMEOUT).then(() => cell.error.set(false));
+  }
+}
+
+function setCellAndAutocomplete(cell: CellData, value: number): boolean {
   if(value <= 0 || value > 9) { return true; }
+  if(cell.filled()) {
+    return true;
+  }
+  if(cell.realValue.get() != value) {
+    return false;
+  }
   return batch(() => {
-    const cell: CellData = getCell(n);
-    if(cell.filled()) {
-      return true;
-    }
-    if(cell.realValue.get() != value) {
-      return false;
-    }
     cell.value.set(value);
-    doAutocomplete(n);
+    doAutocomplete(cell.index);
     return true;
   });
 }
@@ -198,3 +218,35 @@ function doAutocomplete(n: number) {
 export function cellGetter(n: number): Getter<CellData> {
   return memoGetter(() => getCell(n));
 }
+
+function addToSelection(c: number): void {
+  let sel: number = selection.get();
+  sel += c;
+  while(sel > 9) {
+    sel -= 9;
+  }
+  while(sel <= 0) {
+    sel += 9;
+  }
+  selection.set(sel);
+}
+
+function setSelectionHintRemoved(cell: CellData, value: boolean): void {
+  const sel: number = selection.get();
+  if(sel <= 0 || sel > 9) { return; }
+  cell.removedHints[sel].set(value);
+}
+
+function handleSwipe(cell: CellData, dir: SwipeDir): void {
+  if(dir == 'left') {
+    addToSelection(-1);
+  } else if(dir == 'right') {
+    addToSelection(1);
+  } else if(dir == 'up') {
+    setSelectionHintRemoved(cell, false);
+  } else if(dir == 'down') {
+    setSelectionHintRemoved(cell, true);
+  }
+}
+
+export const swipe: Swipe<CellData> = new Swipe(handleSwipe);

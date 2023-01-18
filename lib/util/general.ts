@@ -58,3 +58,7 @@ export function formatTimeAsMinutesSeconds(millis: number): string {
   const s: number = Math.floor((millis / 1000) % 60);
   return `${m}:${zeroPad(s, 2)}`;
 }
+
+export function timeout(millis: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(() => resolve, millis));
+}
