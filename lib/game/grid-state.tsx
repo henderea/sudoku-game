@@ -1,11 +1,11 @@
 import type { Grid } from 'lib/sudoku/Grid';
 import type { KeysOfType } from 'lib/util/general';
-import type { SwipeDir } from 'lib/util/swipe';
+import type { SwipeDir } from 'lib/util/Swipe';
 
 import { createSignal, createMemo, batch } from 'solid-js';
 import { getAcrossFromNumber, getDownFromNumber, getRegionFromNumber, getRowColFromRegionSubIndex } from 'lib/sudoku/utils';
 import { _times, timeout } from 'lib/util/general';
-import { Swipe } from 'lib/util/swipe';
+import { Swipe } from 'lib/util/Swipe';
 
 export const ERROR_TIMEOUT: number = 500;
 
