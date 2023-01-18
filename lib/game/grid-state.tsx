@@ -14,6 +14,8 @@ export interface Getter<T> {
   get(): T;
 }
 
+export const selection = getAndSet(0);
+
 interface BasicCellData {
   realValue: GetAndSet<number>;
   value: GetAndSet<number>;
@@ -30,6 +32,7 @@ export interface CellData extends BasicCellData {
   autoHints: Getter<boolean[]>;
   removedHints: GetAndSet<boolean>[];
   hints: Getter<boolean[]>;
+  matchesSelection: Getter<boolean>;
 }
 
 function getAndSet<T>(initialValue: T): GetAndSet<T> {
@@ -81,6 +84,9 @@ function getAndSetProxy<K extends KeysOfType<BasicCellData, GetAndSet<number>>>(
   return { get, set };
 }
 
+function matchesValue(value: number, currentValue: number, hints: boolean[]): boolean {
+  return value > 0 && (value == currentValue || hints[value]);
+}
 
 function cellData(index: number): CellData {
   const realValue = getAndSetProxy(index, 'realValue');
@@ -89,8 +95,9 @@ function cellData(index: number): CellData {
   const autoHints = memoGetter(() => computeAutoHints(index));
   const removedHints = _times(10, () => getAndSet(false));
   const hints = memoGetter(() => computeHints(autoHints.get(), removedHints));
+  const matchesSelection = memoGetter(() => matchesValue(selection.get(), value.get(), hints.get()));
   const { across, down, region, row, column } = basicData[index];
-  return { realValue, value, filled, autoHints, removedHints, hints, index, across, down, region, row, column };
+  return { realValue, value, filled, autoHints, removedHints, hints, matchesSelection, index, across, down, region, row, column };
 }
 
 const data: CellData[] = _times(81, (i: number) => cellData(i));
@@ -191,5 +198,3 @@ function doAutocomplete(n: number) {
 export function cellGetter(n: number): Getter<CellData> {
   return memoGetter(() => getCell(n));
 }
-
-export const selection = getAndSet(0);
