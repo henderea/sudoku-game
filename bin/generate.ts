@@ -1,7 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import { formatTime } from '../lib/sudoku/utils';
-import { generateGenericGrid, Difficulty, DifficultyMap } from '../lib/sudoku/generate';
+import type { DifficultyMap, Difficulty } from '../lib/sudoku/difficulty';
+import { generateGenericGrid } from '../lib/sudoku/generate';
 
 
 function generateGenericGrids(difficulty: Difficulty, count: number, print = false): { duration: number, grids: Array<{ full: string, grid: string }> } {
