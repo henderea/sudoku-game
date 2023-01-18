@@ -3,13 +3,11 @@ import { createSignal, onCleanup } from 'solid-js';
 
 import { Stopwatch } from 'lib/util/Stopwatch';
 
-export const stopwatch: Stopwatch = new Stopwatch();
-
 export interface Timer {
-  get running(): boolean;
+  running(): boolean;
   get millis(): number;
   get currentTime(): string;
-  get display(): string;
+  display(): string;
 
   start(): void;
   stop(): void;
@@ -40,10 +38,10 @@ class TimerImpl implements Timer {
 
   private get stopwatch(): Stopwatch { return this._stopwatch; }
 
-  get running(): boolean { return this._running(); }
+  running(): boolean { return this._running(); }
   get millis(): number { return this.stopwatch.millis; }
   get currentTime(): string { return this.stopwatch.currentTime; }
-  get display(): string { return this._timeDisplay(); }
+  display(): string { return this._timeDisplay(); }
 
   start(): void { this.stopwatch.start(); }
   stop(): void { this.stopwatch.stop(); }
@@ -66,6 +64,6 @@ export const timer: Timer = new TimerImpl();
 
 export default function TimerDisplay(): JSX.Element {
   return (
-    <span class="timer" classList={{ running: timer.running }}>{timer.display}</span>
+    <span class="timer" classList={{ running: timer.running() }}>{timer.display()}</span>
   );
 }
