@@ -11,3 +11,11 @@ export const difficultySpaces = {
 export declare type Difficulty = keyof typeof difficultySpaces;
 export declare type DifficultyMap<T> = Record<Difficulty, T>;
 export const difficulties: Difficulty[] = Object.keys(difficultySpaces) as Difficulty[];
+
+export function makeDifficultyMap<T>(iter: (difficulty: Difficulty) => T): DifficultyMap<T> {
+  const rv: any = {};
+  for(const d of difficulties) {
+    rv[d] = iter(d);
+  }
+  return rv as DifficultyMap<T>;
+}
