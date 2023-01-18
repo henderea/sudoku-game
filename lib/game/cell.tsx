@@ -1,7 +1,7 @@
 import type { JSX } from 'solid-js';
-import type { CellData, Getter } from './store';
+import type { CellData, Getter } from './grid-state';
 import { Show } from 'solid-js';
-import { cellGetter, selection } from './store';
+import { cellGetter, selection } from './grid-state';
 
 function HintCell(props: { cell: CellData, value: number }): JSX.Element {
   return (
