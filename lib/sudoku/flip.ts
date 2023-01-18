@@ -14,11 +14,11 @@ function getRealFlipType(type: FlipType): RealFlipType {
 }
 
 
-export function flip(full: Grid, grid: Grid, type: FlipType): { full: Grid, grid: Grid, flipType: RealFlipType } {
+export function flip(grids: { full: Grid, grid: Grid }, type: FlipType): { full: Grid, grid: Grid, flipType: RealFlipType } {
   const flipType: RealFlipType = getRealFlipType(type);
   return {
-    full: flipGrid(full, flipType),
-    grid: flipGrid(grid, flipType),
+    full: flipGrid(grids.full, flipType),
+    grid: flipGrid(grids.grid, flipType),
     flipType
   };
 }
