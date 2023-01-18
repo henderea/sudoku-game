@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { formatTime } from '../lib/util/general';
-import type { DifficultyMap, Difficulty } from '../lib/sudoku/difficulty';
+import { DifficultyMap, Difficulty, makeDifficultyMap } from '../lib/sudoku/difficulty';
 import { generateGenericGrid } from '../lib/sudoku/generate';
 
 
@@ -32,7 +32,7 @@ const dirname: string = __dirname;
 
 const outPath: string = path.join(dirname, '../resources/boards.json');
 
-const generatedGrids = generateAllGenericGrids({ easy: 500, medium: 500, hard: 500 }, true);
+const generatedGrids = generateAllGenericGrids(makeDifficultyMap(() => 500), true);
 
 const logDifficultyStats = (difficulty: Difficulty) => {
   console.log(`${difficulty}: ${generatedGrids[difficulty].grids.length} (${formatTime(generatedGrids[difficulty].duration)})`);
