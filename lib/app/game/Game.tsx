@@ -13,10 +13,10 @@ export default function Game(): JSX.Element {
     timer.startTimerInterval();
   });
   return (
-    <>
+    <div class="game-screen">
       <Header/>
       <Grid/>
       <NumberBar/>
-    </>
+    </div>
   );
 }

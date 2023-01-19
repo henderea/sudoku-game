@@ -12,6 +12,10 @@ export const _times: TimesFunc = (length: number, mapper?: (i: number) => any) =
   return Array.from({ length }, (v, i) => m(i));
 };
 
+export function _cap<S extends string>(str: S): Capitalize<S> {
+  return `${str.substring(0, 1).toUpperCase()}${str.substring(1)}` as Capitalize<S>;
+}
+
 export function _rand(min: number, max?: number): number {
   if(!max && max !== 0) {
     max = min;
