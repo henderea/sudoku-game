@@ -2,16 +2,23 @@ import type { Grid } from 'lib/sudoku/Grid';
 import type { KeysOfType } from 'lib/util/general';
 import type { SwipeDir } from 'lib/util/Swipe';
 import type { GetAndSet, Getter } from '../utils';
+import type { Difficulty } from 'lib/sudoku/difficulty';
 
 import { batch } from 'solid-js';
 import { getAcrossFromNumber, getDownFromNumber, getRegionFromNumber, getRowColFromRegionSubIndex } from 'lib/sudoku/utils';
 import { _times, timeout } from 'lib/util/general';
 import { Swipe } from 'lib/util/Swipe';
 import { getAndSetProxy, getAndSetSignal, getter, getterProxy, memoGetter } from '../utils';
+import { loadMenu, difficultyLevel } from '../menu-state';
+import { timer } from './TimerDisplay';
+import { storage } from 'lib/util/Storage';
 
 export const ERROR_TIMEOUT: number = 500;
+export const DONE_TIMEOUT: number = 500;
 
-export const selection = getAndSetSignal(0);
+export const selection: GetAndSet<number> = getAndSetSignal(1);
+
+export const gameComplete: GetAndSet<boolean> = getAndSetSignal(false);
 
 interface BasicCellData {
   realValue: GetAndSet<number>;
@@ -108,6 +115,8 @@ export function getCellRS(r: number, s: number): CellData {
 
 export function resetBoard(full: Grid, grid: Grid) {
   batch(() => {
+    gameComplete.set(false);
+    selection.set(1);
     for(let i = 0; i < 81; i++) {
       const cell: CellData = getCell(i);
       cell.realValue.set(full.get(i).value);
@@ -139,6 +148,7 @@ function setCellAndAutocomplete(cell: CellData, value: number): boolean {
   cell.value.set(value);
   doAutocomplete(cell.index);
   updateSelection(true, true);
+  handleGameCompletion();
   return true;
 }
 
@@ -202,6 +212,20 @@ export function cellGetter(n: number): Getter<CellData> {
 
 function countNumber(num: number): number {
   return data.filter((c: CellData) => c.value() == num).length;
+}
+
+function boardFilled(): boolean { return data.every((c: CellData) => c.filled()); }
+
+function handleGameCompletion(): void {
+  if(boardFilled()) {
+    timer.stop();
+    const difficulty: Difficulty | null = difficultyLevel();
+    if(difficulty) {
+      storage.incrementPlayCount(difficulty).updateBestTime(difficulty, timer.millis);
+    }
+    gameComplete.set(true);
+    timeout(DONE_TIMEOUT).then(() => loadMenu('postGame'));
+  }
 }
 
 export const completedNumbers: Getter<boolean>[] = _times(10, (i: number) => {
