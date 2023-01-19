@@ -1,8 +1,8 @@
-import type { Square } from 'lib/sudoku/Square';
+import type { Square } from './Square';
 
-import { _times } from 'lib/util/general';
+import { _times } from '../util/general';
 
-import { getRowColFromRegionSubIndex } from 'lib/sudoku/utils';
+import { getRowColFromRegionSubIndex } from './utils';
 
 export type UniquenessResult = 'unique' | 'not-unique' | 'no-solution';
 

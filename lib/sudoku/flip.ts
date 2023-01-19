@@ -1,6 +1,6 @@
-import type { Grid } from 'lib/sudoku/Grid';
+import type { Grid } from './Grid';
 
-import { _rand, _times } from 'lib/util/general';
+import { _rand, _times } from '../util/general';
 
 export type RealFlipType = 'none'  | 'flip-rows' | 'flip-columns' | 'rotate-90' | 'rotate-180' | 'rotate-270';
 export type FlipType = RealFlipType | 'random';
