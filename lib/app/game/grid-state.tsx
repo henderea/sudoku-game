@@ -13,6 +13,7 @@ import { getAcrossFromNumber, getDownFromNumber, getRegionFromNumber, getRowColF
 
 import { getAndSetProxy, getAndSetSignal, getter, getterProxy, memoGetter } from '../utils';
 import { difficultyLevel, loadMenu } from '../menu-state';
+import { updateScoreInfo } from '../scores/Scores';
 import { timer } from './TimerDisplay';
 
 export const ERROR_TIMEOUT: number = 500;
@@ -224,6 +225,7 @@ function handleGameCompletion(): void {
     const difficulty: Difficulty | null = difficultyLevel();
     if(difficulty) {
       storage.incrementPlayCount(difficulty).updateBestTime(difficulty, timer.millis);
+      updateScoreInfo(difficulty);
     }
     gameComplete.set(true);
     timeout(DONE_TIMEOUT).then(() => loadMenu('postGame'));
