@@ -1,9 +1,6 @@
 import type { SwipeDir } from 'lib/util/Swipe';
 import type { Difficulty } from 'lib/sudoku/difficulty';
-import type { Grid } from 'lib/sudoku/Grid';
 import type { CellData } from './grid-state';
-
-import { batch } from 'solid-js';
 
 import { timeout } from 'lib/util/general';
 import { storage } from 'lib/util/Storage';
@@ -16,21 +13,6 @@ import { timer } from './TimerDisplay';
 
 export const ERROR_TIMEOUT: number = 500;
 export const DONE_TIMEOUT: number = 500;
-
-export function resetBoard(full: Grid, grid: Grid) {
-  batch(() => {
-    gameComplete.set(false);
-    selection.set(1);
-    for(let i = 0; i < 81; i++) {
-      const cell: CellData = getCell(i);
-      cell.realValue.set(full.get(i).value);
-      cell.value.set(grid.get(i).value);
-      for(let j = 0; j <= 9; j++) {
-        cell.removedHints[j].set(false);
-      }
-    }
-  });
-}
 
 export function setCellToSelectionAndAutocomplete(cell: CellData): void {
   const value: number = selection();

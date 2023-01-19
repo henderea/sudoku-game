@@ -1,5 +1,8 @@
 import type { KeysOfType } from 'lib/util/general';
+import type { Grid } from 'lib/sudoku/Grid';
 import type { GetAndSet, Getter } from '../utils';
+
+import { batch } from 'solid-js';
 
 import { _times } from 'lib/util/general';
 import { getAcrossFromNumber, getDownFromNumber, getRegionFromNumber, getRowColFromRegionSubIndex } from 'lib/sudoku/utils';
@@ -117,3 +120,18 @@ export const completedNumbers: Getter<boolean>[] = _times(10, (i: number) => {
   }
   return memoGetter(() => countNumber(i) == 9);
 });
+
+export function resetBoard(full: Grid, grid: Grid) {
+  batch(() => {
+    gameComplete.set(false);
+    selection.set(1);
+    for(let i = 0; i < 81; i++) {
+      const cell: CellData = getCell(i);
+      cell.realValue.set(full.get(i).value);
+      cell.value.set(grid.get(i).value);
+      for(let j = 0; j <= 9; j++) {
+        cell.removedHints[j].set(false);
+      }
+    }
+  });
+}
