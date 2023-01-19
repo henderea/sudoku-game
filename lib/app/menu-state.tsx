@@ -2,7 +2,8 @@ import type { GetAndSet } from './utils';
 import type { Difficulty } from 'lib/sudoku/difficulty';
 
 import { getAndSet } from './utils';
-import { boards } from './Boards';
+import { boards } from './game/Boards';
+import { timer } from './game/TimerDisplay';
 
 export declare type MenuType = 'main' | 'difficulty-select' | 'scores' | 'game' | 'post-game';
 
@@ -22,4 +23,5 @@ export function loadGame(difficulty: Difficulty | null = null): void {
   difficultyLevel.set(difficulty);
   loadMenu('game');
   boards.loadDifficulty(difficulty);
+  timer.start();
 }

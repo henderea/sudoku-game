@@ -1,6 +1,6 @@
 import type { JSX } from 'solid-js';
 import type { CellData } from './grid-state';
-import type { Getter } from './utils';
+import type { Getter } from '../utils';
 import { Show } from 'solid-js';
 import { cellGetter, selection, setCellToSelectionAndAutocomplete, swipe } from './grid-state';
 
