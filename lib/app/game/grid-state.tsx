@@ -13,6 +13,8 @@ export const selection: GetAndSet<number> = getAndSetSignal(1);
 
 export const gameComplete: GetAndSet<boolean> = getAndSetSignal(false);
 
+export const newHighScore: GetAndSet<boolean> = getAndSetSignal(false);
+
 interface BasicCellData {
   realValue: GetAndSet<number>;
   value: GetAndSet<number>;
@@ -125,6 +127,7 @@ export function resetBoard(full: Grid, grid: Grid) {
   batch(() => {
     gameComplete.set(false);
     selection.set(1);
+    newHighScore.set(false);
     for(let i = 0; i < 81; i++) {
       const cell: CellData = getCell(i);
       cell.realValue.set(full.get(i).value);

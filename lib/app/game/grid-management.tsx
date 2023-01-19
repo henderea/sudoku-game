@@ -7,7 +7,7 @@ import { storage } from 'lib/util/Storage';
 import { Swipe } from 'lib/util/Swipe';
 
 import { difficultyLevel, loadMenu } from '../menu-state';
-import { completedNumbers, gameComplete, getCell, getCellRC, getCellRS, getData, selection } from './grid-state';
+import { completedNumbers, gameComplete, getCell, getCellRC, getCellRS, getData, newHighScore, selection } from './grid-state';
 import { updateScoreInfo } from '../scores/Scores';
 import { timer } from './TimerDisplay';
 
@@ -99,7 +99,7 @@ function handleGameCompletion(): void {
     timer.stop();
     const difficulty: Difficulty | null = difficultyLevel();
     if(difficulty) {
-      storage.incrementPlayCount(difficulty).updateBestTime(difficulty, timer.millis);
+      storage.incrementPlayCount(difficulty).updateBestTime(difficulty, timer.millis, newHighScore);
       updateScoreInfo(difficulty);
     }
     gameComplete.set(true);
