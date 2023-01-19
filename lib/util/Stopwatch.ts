@@ -1,4 +1,4 @@
-import { formatTimeAsMinutesSeconds } from 'lib/util/general';
+import { formatTimeAsMinutesSeconds } from './general';
 
 export type StopwatchEvent = 'start' | 'stop' | 'reset' | 'all';
 export type StopwatchListener = (stopwatch: Stopwatch, event: StopwatchEvent) => void;

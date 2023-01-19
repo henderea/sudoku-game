@@ -2,7 +2,7 @@ import type { JSX } from 'solid-js';
 
 import { _times } from 'lib/util/general';
 
-import { completedNumbers, selection } from 'lib/app/game/grid-state';
+import { completedNumbers, selection } from './grid-state';
 
 function setSelection(value: number): void {
   if(value < 1 || value > 9 || completedNumbers[value]()) { return; }

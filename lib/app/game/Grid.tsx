@@ -4,10 +4,10 @@ import { Match, Switch } from 'solid-js';
 
 import { _times } from 'lib/util/general';
 
-import { gameComplete } from 'lib/app/game/grid-state';
-import { timer } from 'lib/app/game/TimerDisplay';
+import { gameComplete } from './grid-state';
+import { timer } from './TimerDisplay';
 
-import Cell from 'lib/app/game/Cell';
+import Cell from './Cell';
 
 function PlayGrid(): JSX.Element {
   return (

@@ -1,6 +1,6 @@
 import type { JSX } from 'solid-js';
 
-import { loadMenu } from 'lib/app/menu-state';
+import { loadMenu } from '../menu-state';
 
 export default function MainMenu(): JSX.Element {
   return (

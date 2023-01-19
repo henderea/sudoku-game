@@ -4,7 +4,7 @@ import type { Difficulty } from 'lib/sudoku/difficulty';
 import { _cap } from 'lib/util/general';
 import { difficulties } from 'lib/sudoku/difficulty';
 
-import { loadGame, loadMenu } from 'lib/app/menu-state';
+import { loadGame, loadMenu } from '../menu-state';
 
 export default function DifficultySelect(): JSX.Element {
   return (

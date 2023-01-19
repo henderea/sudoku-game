@@ -1,4 +1,4 @@
-import type { KeysOfType } from 'lib/util/general';
+import type { KeysOfType } from './general';
 import type { Difficulty, DifficultyMap } from 'lib/sudoku/difficulty';
 
 import { makeDifficultyMap } from 'lib/sudoku/difficulty';

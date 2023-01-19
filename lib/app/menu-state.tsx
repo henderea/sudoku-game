@@ -1,16 +1,16 @@
 import type { JSX } from 'solid-js';
 import type { Difficulty } from 'lib/sudoku/difficulty';
-import type { GetAndSet } from 'lib/app/utils';
+import type { GetAndSet } from './utils';
 
-import { getAndSetSignal } from 'lib/app/utils';
-import { boards } from 'lib/app/game/Boards';
-import { timer } from 'lib/app/game/TimerDisplay';
+import { getAndSetSignal } from './utils';
+import { boards } from './game/Boards';
+import { timer } from './game/TimerDisplay';
 
-import MainMenu from 'lib/app/main-menu/MainMenu';
-import DifficultySelect from 'lib/app/difficulty-select/DifficultySelect';
-import Scores from 'lib/app/scores/Scores';
-import Game from 'lib/app/game/Game';
-import PostGame from 'lib/app/post-game/PostGame';
+import MainMenu from './main-menu/MainMenu';
+import DifficultySelect from './difficulty-select/DifficultySelect';
+import Scores from './scores/Scores';
+import Game from './game/Game';
+import PostGame from './post-game/PostGame';
 
 function menuItem(menu: () => JSX.Element, preserveDifficulty: boolean): { menu: () => JSX.Element, preserveDifficulty: boolean } {
   return { menu, preserveDifficulty };

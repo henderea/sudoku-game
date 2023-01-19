@@ -2,11 +2,11 @@ import type { JSX } from 'solid-js';
 
 import { onMount } from 'solid-js';
 
-import { timer } from 'lib/app/game/TimerDisplay';
+import { timer } from './TimerDisplay';
 
-import Header from 'lib/app/game/Header';
-import Grid from 'lib/app/game/Grid';
-import NumberBar from 'lib/app/game/NumberBar';
+import Header from './Header';
+import Grid from './Grid';
+import NumberBar from './NumberBar';
 
 export default function Game(): JSX.Element {
   onMount(() => {
