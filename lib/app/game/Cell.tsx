@@ -6,8 +6,8 @@ import { cellGetter, selection, setCellToSelectionAndAutocomplete, swipe } from 
 
 function HintCell(props: { cell: CellData, value: number }): JSX.Element {
   return (
-    <td classList={{ active: props.cell.hints.get()[props.value] && selection.get() == props.value }}>
-      {props.cell.hints.get()[props.value] ? props.value : ''}
+    <td classList={{ active: props.cell.hints()[props.value] && selection() == props.value }}>
+      {props.cell.hints()[props.value] ? props.value : ''}
     </td>
   );
 }
@@ -15,23 +15,23 @@ function HintCell(props: { cell: CellData, value: number }): JSX.Element {
 export default function Cell(props: { index: number }): JSX.Element {
   const cell: Getter<CellData> = cellGetter(props.index);
   return (
-    <td classList={{ filled: cell.get().filled(), matchesSelection: cell.get().matchesSelection.get(), error: cell.get().error.get() }} onClick={[setCellToSelectionAndAutocomplete, cell.get()]} onTouchStart={[swipe.touchStart, cell.get()]} onTouchMove={swipe.touchMove}>
-      <Show when={!cell.get().filled()} fallback={cell.get().value.get()}>
+    <td classList={{ filled: cell().filled(), matchesSelection: cell().matchesSelection(), error: cell().error() }} onClick={[setCellToSelectionAndAutocomplete, cell()]} onTouchStart={[swipe.touchStart, cell()]} onTouchMove={swipe.touchMove}>
+      <Show when={!cell().filled()} fallback={cell().value()}>
         <table class="hint-table">
           <tr>
-            <HintCell cell={cell.get()} value={1}/>
-            <HintCell cell={cell.get()} value={2}/>
-            <HintCell cell={cell.get()} value={3}/>
+            <HintCell cell={cell()} value={1}/>
+            <HintCell cell={cell()} value={2}/>
+            <HintCell cell={cell()} value={3}/>
           </tr>
           <tr>
-            <HintCell cell={cell.get()} value={4}/>
-            <HintCell cell={cell.get()} value={5}/>
-            <HintCell cell={cell.get()} value={6}/>
+            <HintCell cell={cell()} value={4}/>
+            <HintCell cell={cell()} value={5}/>
+            <HintCell cell={cell()} value={6}/>
           </tr>
           <tr>
-            <HintCell cell={cell.get()} value={7}/>
-            <HintCell cell={cell.get()} value={8}/>
-            <HintCell cell={cell.get()} value={9}/>
+            <HintCell cell={cell()} value={7}/>
+            <HintCell cell={cell()} value={8}/>
+            <HintCell cell={cell()} value={9}/>
           </tr>
         </table>
       </Show>

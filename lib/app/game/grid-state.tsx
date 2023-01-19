@@ -7,17 +7,17 @@ import { batch } from 'solid-js';
 import { getAcrossFromNumber, getDownFromNumber, getRegionFromNumber, getRowColFromRegionSubIndex } from 'lib/sudoku/utils';
 import { _times, timeout } from 'lib/util/general';
 import { Swipe } from 'lib/util/Swipe';
-import { getAndSet, getter, memoGetter } from '../utils';
+import { getAndSetProxy, getAndSetSignal, getter, getterProxy, memoGetter } from '../utils';
 
 export const ERROR_TIMEOUT: number = 500;
 
-export const selection = getAndSet(0);
+export const selection = getAndSetSignal(0);
 
 interface BasicCellData {
   realValue: GetAndSet<number>;
   value: GetAndSet<number>;
   error: GetAndSet<boolean>;
-  filled: () => boolean;
+  filled: Getter<boolean>;
   index: number;
   across: number;
   down: number;
@@ -34,10 +34,10 @@ export interface CellData extends BasicCellData {
 }
 
 function basicCellData(index: number): BasicCellData {
-  const realValue = getAndSet(0);
-  const value = getAndSet(0);
-  const error = getAndSet(false);
-  const filled = () => value.get() > 0;
+  const realValue = getAndSetSignal(0);
+  const value = getAndSetSignal(0);
+  const error = getAndSetSignal(false);
+  const filled = memoGetter(() => value() > 0);
   const across: number = getAcrossFromNumber(index);
   const down: number = getDownFromNumber(index);
   const region: number = getRegionFromNumber(index);
@@ -56,7 +56,7 @@ function computeAutoHints(n: number): boolean[] {
     if(i != n) {
       const c: BasicCellData = basicData[i];
       if(c.across == across || c.down == down || c.region == region) {
-        remainingValues[c.value.get()] = false;
+        remainingValues[c.value()] = false;
       }
     }
   }
@@ -64,19 +64,19 @@ function computeAutoHints(n: number): boolean[] {
 }
 
 function computeHints(autoHints: boolean[], removedHints: GetAndSet<boolean>[]): boolean[] {
-  return _times(10, (i: number) => autoHints[i] && !removedHints[i].get());
+  return _times(10, (i: number) => autoHints[i] && !removedHints[i]());
 }
 
 function getAndSetProxyNumber<K extends KeysOfType<BasicCellData, GetAndSet<number>>>(i: number, key: K): GetAndSet<number> {
-  const get = () => basicData[i][key].get();
-  const set = (value: number) => basicData[i][key].set(value);
-  return { get, set };
+  return getAndSetProxy(() => basicData[i][key]);
 }
 
 function getAndSetProxyBoolean<K extends KeysOfType<BasicCellData, GetAndSet<boolean>>>(i: number, key: K): GetAndSet<boolean> {
-  const get = () => basicData[i][key].get();
-  const set = (value: boolean) => basicData[i][key].set(value);
-  return { get, set };
+  return getAndSetProxy(() => basicData[i][key]);
+}
+
+function getterProxyBoolean<K extends KeysOfType<BasicCellData, Getter<boolean>>>(i: number, key: K): Getter<boolean> {
+  return getterProxy(() => basicData[i][key]);
 }
 
 function matchesValue(value: number, currentValue: number, hints: boolean[]): boolean {
@@ -86,12 +86,12 @@ function matchesValue(value: number, currentValue: number, hints: boolean[]): bo
 function cellData(index: number): CellData {
   const realValue = getAndSetProxyNumber(index, 'realValue');
   const value = getAndSetProxyNumber(index, 'value');
-  const filled = () => basicData[index].filled();
+  const filled = getterProxyBoolean(index, 'filled');
   const error = getAndSetProxyBoolean(index, 'error');
   const autoHints = memoGetter(() => computeAutoHints(index));
-  const removedHints = _times(10, () => getAndSet(false));
-  const hints = memoGetter(() => computeHints(autoHints.get(), removedHints));
-  const matchesSelection = memoGetter(() => matchesValue(selection.get(), value.get(), hints.get()));
+  const removedHints = _times(10, () => getAndSetSignal(false));
+  const hints = memoGetter(() => computeHints(autoHints(), removedHints));
+  const matchesSelection = memoGetter(() => matchesValue(selection(), value(), hints()));
   const { across, down, region, row, column } = basicData[index];
   return { realValue, value, filled, error, autoHints, removedHints, hints, matchesSelection, index, across, down, region, row, column };
 }
@@ -120,7 +120,7 @@ export function resetBoard(full: Grid, grid: Grid) {
 }
 
 export function setCellToSelectionAndAutocomplete(cell: CellData): void {
-  const value: number = selection.get();
+  const value: number = selection();
   const accepted: boolean = setCellAndAutocomplete(cell, value);
   if(!accepted) {
     cell.error.set(true);
@@ -133,13 +133,11 @@ function setCellAndAutocomplete(cell: CellData, value: number): boolean {
   if(cell.filled()) {
     return true;
   }
-  if(cell.realValue.get() != value) {
+  if(cell.realValue() != value) {
     return false;
   }
-  batch(() => {
-    cell.value.set(value);
-    doAutocomplete(cell.index);
-  });
+  cell.value.set(value);
+  doAutocomplete(cell.index);
   updateSelection(true, true);
   return true;
 }
@@ -180,7 +178,7 @@ function getEmptyRegion(region: number): CellData[] {
 function fillSingleRemaining(emptyCells: CellData[], updatedIndexes: number[]): void {
   if(emptyCells.length == 1) {
     const cell: CellData = emptyCells[0];
-    cell.value.set(cell.realValue.get());
+    cell.value.set(cell.realValue());
     updatedIndexes.push(cell.index);
   }
 }
@@ -203,7 +201,7 @@ export function cellGetter(n: number): Getter<CellData> {
 }
 
 function countNumber(num: number): number {
-  return data.filter((c: CellData) => c.value.get() == num).length;
+  return data.filter((c: CellData) => c.value() == num).length;
 }
 
 export const completedNumbers: Getter<boolean>[] = _times(10, (i: number) => {
@@ -225,7 +223,7 @@ function pickNewSelection(sel: number, up: boolean): number {
   let s: number = sel;
   for(let i = 0; i < 9; i++) {
     s = addToSelection(s, up);
-    if(!completedNumbers[s].get()) {
+    if(!completedNumbers[s]()) {
       return s;
     }
   }
@@ -233,8 +231,8 @@ function pickNewSelection(sel: number, up: boolean): number {
 }
 
 function updateSelection(up: boolean, checkCompletion: boolean = false): void {
-  const sel: number = selection.get();
-  if(checkCompletion && !completedNumbers[sel].get()) { return; }
+  const sel: number = selection();
+  if(checkCompletion && !completedNumbers[sel]()) { return; }
   const newSel: number = pickNewSelection(sel, up);
   if(newSel != sel) {
     selection.set(newSel);
@@ -242,7 +240,7 @@ function updateSelection(up: boolean, checkCompletion: boolean = false): void {
 }
 
 function setSelectionHintRemoved(cell: CellData, value: boolean): void {
-  const sel: number = selection.get();
+  const sel: number = selection();
   if(sel <= 0 || sel > 9) { return; }
   cell.removedHints[sel].set(value);
 }

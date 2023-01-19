@@ -7,7 +7,7 @@ import { menus, menuType } from './menu-state';
 export default function App(): JSX.Element {
   return (
     <>
-      <Dynamic component={menus[menuType.get()].menu}/>
+      <Dynamic component={menus[menuType()].menu}/>
     </>
   );
 }

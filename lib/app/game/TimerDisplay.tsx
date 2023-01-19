@@ -1,6 +1,9 @@
 import type { JSX } from 'solid-js';
-import { createSignal, onCleanup } from 'solid-js';
+import type { GetAndSet } from '../utils';
 
+import { onCleanup } from 'solid-js';
+
+import { getAndSetSignal } from '../utils';
 import { Stopwatch } from 'lib/util/Stopwatch';
 
 export interface Timer {
@@ -20,19 +23,15 @@ export interface Timer {
 
 class TimerImpl implements Timer {
   private readonly _stopwatch: Stopwatch;
-  private readonly _running: () => boolean;
-  private readonly _timeDisplay: () => string;
-  private readonly _setTimeDisplay: (value: string) => void;
+  private readonly _running: GetAndSet<boolean>;
+  private readonly _timeDisplay: GetAndSet<string>;
   private _interval: number | undefined = undefined;
 
   constructor() {
     this._stopwatch = new Stopwatch();
-    const [running, setRunning] = createSignal(false);
-    this._running = running;
-    this.stopwatch.on('all', (s: Stopwatch) => setRunning(s.running));
-    const [timeDisplay, setTimeDisplay] = createSignal('0:00');
-    this._timeDisplay = timeDisplay;
-    this._setTimeDisplay = setTimeDisplay;
+    this._running = getAndSetSignal(false);
+    this.stopwatch.on('all', (s: Stopwatch) => this._running.set(s.running));
+    this._timeDisplay = getAndSetSignal('0:00');
     onCleanup(() => this.clearTimerInterval());
   }
 
@@ -56,7 +55,7 @@ class TimerImpl implements Timer {
   }
   startTimerInterval(): void {
     this.clearTimerInterval();
-    this._interval = setInterval(() => this._setTimeDisplay(this.currentTime), 200);
+    this._interval = setInterval(() => this._timeDisplay.set(this.currentTime), 200);
   }
 }
 

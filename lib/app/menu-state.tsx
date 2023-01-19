@@ -2,7 +2,7 @@ import type { JSX } from 'solid-js';
 import type { GetAndSet } from './utils';
 import type { Difficulty } from 'lib/sudoku/difficulty';
 
-import { getAndSet } from './utils';
+import { getAndSetSignal } from './utils';
 import { boards } from './game/Boards';
 import { timer } from './game/TimerDisplay';
 
@@ -26,9 +26,9 @@ export const menus = {
 
 export declare type MenuType = keyof typeof menus;
 
-export const menuType: GetAndSet<MenuType> = getAndSet('main');
+export const menuType: GetAndSet<MenuType> = getAndSetSignal('main');
 
-export const difficultyLevel: GetAndSet<Difficulty | null> = getAndSet(null);
+export const difficultyLevel: GetAndSet<Difficulty | null> = getAndSetSignal(null);
 
 export function loadMenu(menu: MenuType) {
   if(!menus[menu].preserveDifficulty) {
@@ -38,7 +38,7 @@ export function loadMenu(menu: MenuType) {
 }
 
 export function loadGame(difficulty: Difficulty | null = null): void {
-  if(!difficulty) { difficulty = difficultyLevel.get() || 'easy'; }
+  if(!difficulty) { difficulty = difficultyLevel() || 'easy'; }
   difficultyLevel.set(difficulty);
   loadMenu('game');
   boards.loadDifficulty(difficulty);
