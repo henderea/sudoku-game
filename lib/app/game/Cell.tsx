@@ -4,7 +4,8 @@ import type { Getter } from '../utils';
 
 import { Show } from 'solid-js';
 
-import { cellGetter, selection, setCellToSelectionAndAutocomplete, swipe } from './grid-state';
+import { setCellToSelectionAndAutocomplete, swipe } from './grid-management';
+import { cellGetter, selection } from './grid-state';
 
 function HintCell(props: { cell: CellData, value: number }): JSX.Element {
   return (

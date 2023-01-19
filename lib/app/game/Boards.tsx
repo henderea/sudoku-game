@@ -5,7 +5,7 @@ import { _rand } from 'lib/util/general';
 import { importGenericGrid } from 'lib/sudoku/exportImport';
 import { flip } from 'lib/sudoku/flip';
 
-import { resetBoard } from './grid-state';
+import { resetBoard } from './grid-management';
 
 import boardsData from 'resources/boards.json';
 
