@@ -17,7 +17,7 @@ export default function Cell(props: { index: number }): JSX.Element {
   return (
     <td classList={{ filled: cell().filled(), matchesSelection: cell().matchesSelection(), error: cell().error() }} onClick={[setCellToSelectionAndAutocomplete, cell()]} onTouchStart={[swipe.touchStart, cell()]} onTouchMove={swipe.touchMove}>
       <Show when={!cell().filled()} fallback={cell().value()}>
-        <table class="hint-table">
+        <table class="hintTable">
           <tr>
             <HintCell cell={cell()} value={1}/>
             <HintCell cell={cell()} value={2}/>

@@ -14,7 +14,7 @@ function NumberCell(props: { value: number }): JSX.Element {
 
 export default function NumberBar(): JSX.Element {
   return (
-    <table class="number-bar">
+    <table class="numberBar">
       <tr>
         {_times(9, (i: number) => (
           <NumberCell value={i + 1}/>

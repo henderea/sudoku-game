@@ -7,7 +7,7 @@ import { _times } from 'lib/util/general';
 
 export default function Grid(): JSX.Element {
   return (
-    <Show when={timer.running()} fallback={<div class="paused-grid"><div class="paused-grid-icon"></div></div>}>
+    <Show when={timer.running()} fallback={<div class="pausedGrid"><div class="pausedGridIcon"></div></div>}>
       <table class="grid">
         {_times(9, (row: number) => (
           <tr>

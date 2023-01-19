@@ -12,21 +12,21 @@ export const scores: DifficultyMap<GetAndSet<string | null>> = makeDifficultyMap
 
 function ScoreEntry(props: { difficulty: Difficulty }): JSX.Element {
   return (
-    <div class="score-entry" classList={{ notPlayed: scores[props.difficulty]() === null }}>
+    <div class="scoreEntry" classList={{ notPlayed: scores[props.difficulty]() === null }}>
       <div class="difficulty">{_cap(props.difficulty)}</div>
-      <div class="best-time">{scores[props.difficulty]() || 'Not Played'}</div>
+      <div class="bestTime">{scores[props.difficulty]() || 'Not Played'}</div>
     </div>
   );
 }
 
 export default function Scores(): JSX.Element {
   return (
-    <div class="scores-screen">
+    <div class="scoresScreen">
       {difficulties.map((d: Difficulty) => (
         <ScoreEntry difficulty={d}/>
       ))}
-      <div class="menu-spacer"></div>
-      <div class="menu-button" onClick={[loadMenu, 'main']}>Back</div>
+      <div class="menuSpacer"></div>
+      <div class="menuButton" onClick={[loadMenu, 'main']}>Back</div>
     </div>
   );
 }

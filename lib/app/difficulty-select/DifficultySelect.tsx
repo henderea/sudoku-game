@@ -7,12 +7,12 @@ import { _cap } from 'lib/util/general';
 
 export default function DifficultySelect(): JSX.Element {
   return (
-    <div class="difficulty-select">
+    <div class="difficultySelect">
       {difficulties.map((d: Difficulty) => (
-        <div class="menu-button" onClick={[loadGame, d]}>{_cap(d)}</div>
+        <div class="menuButton" onClick={[loadGame, d]}>{_cap(d)}</div>
       ))}
-      <div class="menu-spacer"></div>
-      <div class="menu-button" onClick={[loadMenu, 'main']}>Back</div>
+      <div class="menuSpacer"></div>
+      <div class="menuButton" onClick={[loadMenu, 'main']}>Back</div>
     </div>
   );
 }
