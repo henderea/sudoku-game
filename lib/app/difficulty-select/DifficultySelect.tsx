@@ -1,9 +1,10 @@
 import type { JSX } from 'solid-js';
 import type { Difficulty } from 'lib/sudoku/difficulty';
 
-import { loadMenu, loadGame } from '../menu-state';
-import { difficulties } from 'lib/sudoku/difficulty';
 import { _cap } from 'lib/util/general';
+import { difficulties } from 'lib/sudoku/difficulty';
+
+import { loadGame, loadMenu } from 'lib/app/menu-state';
 
 export default function DifficultySelect(): JSX.Element {
   return (

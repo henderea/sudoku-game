@@ -1,9 +1,12 @@
-import { _rand, _times } from '../util/general';
-import { toGenericGrid } from './exportImport';
+import type { Difficulty } from 'lib/sudoku/difficulty';
+import type { Square } from 'lib/sudoku/Square';
 
-import { Square, square } from './Square';
-import { Grid } from './Grid';
-import { difficultySpaces, Difficulty } from './difficulty';
+import { _rand, _times } from 'lib/util/general';
+
+import { difficultySpaces } from 'lib/sudoku/difficulty';
+import { toGenericGrid } from 'lib/sudoku/exportImport';
+import { Grid } from 'lib/sudoku/Grid';
+import { square } from 'lib/sudoku/Square';
 
 function getRandomSpacesForDifficulty(difficulty: Difficulty): number {
   const spaceRange: [number, number] = difficultySpaces[difficulty];

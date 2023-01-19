@@ -1,7 +1,8 @@
 import type { JSX } from 'solid-js';
 
-import { selection, completedNumbers } from './grid-state';
 import { _times } from 'lib/util/general';
+
+import { completedNumbers, selection } from 'lib/app/game/grid-state';
 
 function setSelection(value: number): void {
   if(value < 1 || value > 9 || completedNumbers[value]()) { return; }

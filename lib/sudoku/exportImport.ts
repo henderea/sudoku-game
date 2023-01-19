@@ -1,7 +1,9 @@
-import { _shuffleCopy } from '../util/general';
+import type { Square } from 'lib/sudoku/Square';
 
-import { Square, square } from './Square';
-import { Grid } from './Grid';
+import { _shuffleCopy } from 'lib/util/general';
+
+import { Grid } from 'lib/sudoku/Grid';
+import { square } from 'lib/sudoku/Square';
 
 const numberToGeneric: string[] = ['-','a','b','c','d','e','f','g','h','i'];
 

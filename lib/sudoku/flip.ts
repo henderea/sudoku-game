@@ -1,4 +1,4 @@
-import type { Grid } from './Grid';
+import type { Grid } from 'lib/sudoku/Grid';
 
 import { _rand, _times } from 'lib/util/general';
 

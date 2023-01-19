@@ -1,4 +1,4 @@
-import { getAcrossFromNumber, getDownFromNumber, getRegionFromNumber } from './utils';
+import { getAcrossFromNumber, getDownFromNumber, getRegionFromNumber } from 'lib/sudoku/utils';
 
 export interface Square {
     get index(): number;

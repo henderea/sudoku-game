@@ -1,10 +1,13 @@
 import type { JSX } from 'solid-js';
 
-import { Switch, Match } from 'solid-js';
-import Cell from './Cell';
-import { timer } from './TimerDisplay';
+import { Match, Switch } from 'solid-js';
+
 import { _times } from 'lib/util/general';
-import { gameComplete } from './grid-state';
+
+import { gameComplete } from 'lib/app/game/grid-state';
+import { timer } from 'lib/app/game/TimerDisplay';
+
+import Cell from 'lib/app/game/Cell';
 
 function PlayGrid(): JSX.Element {
   return (

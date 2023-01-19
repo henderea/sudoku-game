@@ -1,17 +1,19 @@
-import type { Grid } from 'lib/sudoku/Grid';
 import type { KeysOfType } from 'lib/util/general';
 import type { SwipeDir } from 'lib/util/Swipe';
-import type { GetAndSet, Getter } from '../utils';
 import type { Difficulty } from 'lib/sudoku/difficulty';
+import type { Grid } from 'lib/sudoku/Grid';
+import type { GetAndSet, Getter } from 'lib/app/utils';
 
 import { batch } from 'solid-js';
-import { getAcrossFromNumber, getDownFromNumber, getRegionFromNumber, getRowColFromRegionSubIndex } from 'lib/sudoku/utils';
+
 import { _times, timeout } from 'lib/util/general';
-import { Swipe } from 'lib/util/Swipe';
-import { getAndSetProxy, getAndSetSignal, getter, getterProxy, memoGetter } from '../utils';
-import { loadMenu, difficultyLevel } from '../menu-state';
-import { timer } from './TimerDisplay';
 import { storage } from 'lib/util/Storage';
+import { Swipe } from 'lib/util/Swipe';
+import { getAcrossFromNumber, getDownFromNumber, getRegionFromNumber, getRowColFromRegionSubIndex } from 'lib/sudoku/utils';
+
+import { getAndSetProxy, getAndSetSignal, getter, getterProxy, memoGetter } from 'lib/app/utils';
+import { difficultyLevel, loadMenu } from 'lib/app/menu-state';
+import { timer } from 'lib/app/game/TimerDisplay';
 
 export const ERROR_TIMEOUT: number = 500;
 export const DONE_TIMEOUT: number = 500;

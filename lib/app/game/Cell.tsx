@@ -1,8 +1,10 @@
 import type { JSX } from 'solid-js';
-import type { CellData } from './grid-state';
-import type { Getter } from '../utils';
+import type { CellData } from 'lib/app/game/grid-state';
+import type { Getter } from 'lib/app/utils';
+
 import { Show } from 'solid-js';
-import { cellGetter, selection, setCellToSelectionAndAutocomplete, swipe } from './grid-state';
+
+import { cellGetter, selection, setCellToSelectionAndAutocomplete, swipe } from 'lib/app/game/grid-state';
 
 function HintCell(props: { cell: CellData, value: number }): JSX.Element {
   return (

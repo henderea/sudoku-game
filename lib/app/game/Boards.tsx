@@ -1,10 +1,12 @@
 import type { Difficulty, DifficultyMap } from 'lib/sudoku/difficulty';
 import type { Grid } from 'lib/sudoku/Grid';
 
-import { flip } from 'lib/sudoku/flip';
-import { importGenericGrid } from 'lib/sudoku/exportImport';
 import { _rand } from 'lib/util/general';
-import { resetBoard } from './grid-state';
+import { importGenericGrid } from 'lib/sudoku/exportImport';
+import { flip } from 'lib/sudoku/flip';
+
+import { resetBoard } from 'lib/app/game/grid-state';
+
 import boardsData from 'resources/boards.json';
 
 export interface Boards {

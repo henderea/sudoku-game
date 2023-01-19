@@ -1,10 +1,11 @@
 import type { JSX } from 'solid-js';
-import type { GetAndSet } from '../utils';
+import type { GetAndSet } from 'lib/app/utils';
 
 import { onCleanup } from 'solid-js';
 
-import { getAndSetSignal } from '../utils';
 import { Stopwatch } from 'lib/util/Stopwatch';
+
+import { getAndSetSignal } from 'lib/app/utils';
 
 export interface Timer {
   running(): boolean;

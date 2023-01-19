@@ -1,4 +1,4 @@
-import { createSignal, createMemo } from 'solid-js';
+import { createMemo, createSignal } from 'solid-js';
 
 export interface GetAndSet<T> {
   (): T;

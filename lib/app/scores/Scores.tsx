@@ -1,12 +1,13 @@
 import type { JSX } from 'solid-js';
-import type { GetAndSet } from '../utils';
 import type { Difficulty, DifficultyMap } from 'lib/sudoku/difficulty';
+import type { GetAndSet } from 'lib/app/utils';
 
-import { getAndSetSignal } from '../utils';
-import { loadMenu } from '../menu-state';
-
-import { difficulties, makeDifficultyMap } from 'lib/sudoku/difficulty';
 import { _cap } from 'lib/util/general';
+import { difficulties, makeDifficultyMap } from 'lib/sudoku/difficulty';
+
+import { getAndSetSignal } from 'lib/app/utils';
+import { loadMenu } from 'lib/app/menu-state';
+
 
 export const scores: DifficultyMap<GetAndSet<string | null>> = makeDifficultyMap(() => getAndSetSignal(null));
 
