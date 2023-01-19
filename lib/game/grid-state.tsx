@@ -136,11 +136,12 @@ function setCellAndAutocomplete(cell: CellData, value: number): boolean {
   if(cell.realValue.get() != value) {
     return false;
   }
-  return batch(() => {
+  batch(() => {
     cell.value.set(value);
     doAutocomplete(cell.index);
-    return true;
   });
+  updateSelection(true, true);
+  return true;
 }
 
 function getEmptyRow(row: number): CellData[] {
@@ -231,8 +232,9 @@ function pickNewSelection(sel: number, up: boolean): number {
   return sel;
 }
 
-function updateSelection(up: boolean): void {
+function updateSelection(up: boolean, checkCompletion: boolean = false): void {
   const sel: number = selection.get();
+  if(checkCompletion && !completedNumbers[sel].get()) { return; }
   const newSel: number = pickNewSelection(sel, up);
   if(newSel != sel) {
     selection.set(newSel);
