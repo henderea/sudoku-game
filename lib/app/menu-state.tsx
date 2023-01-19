@@ -24,7 +24,7 @@ export const menus = {
   postGame: menuItem(PostGame, true)
 } as const;
 
-export declare type MenuType = keyof typeof menus;
+export type MenuType = keyof typeof menus;
 
 export const menuType: GetAndSet<MenuType> = getAndSetSignal('main');
 

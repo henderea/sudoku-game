@@ -8,8 +8,8 @@ export const difficultySpaces = {
   hard: r(25, 30)
 } as const;
 
-export declare type Difficulty = keyof typeof difficultySpaces;
-export declare type DifficultyMap<T> = Record<Difficulty, T>;
+export type Difficulty = keyof typeof difficultySpaces;
+export type DifficultyMap<T> = Record<Difficulty, T>;
 export const difficulties: Difficulty[] = Object.keys(difficultySpaces) as Difficulty[];
 
 export function makeDifficultyMap<T>(iter: (difficulty: Difficulty) => T): DifficultyMap<T> {

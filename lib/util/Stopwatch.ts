@@ -1,9 +1,9 @@
 import { formatTimeAsMinutesSeconds } from 'lib/util/general';
 
-export declare type StopwatchEvent = 'start' | 'stop' | 'reset' | 'all';
-export declare type StopwatchListener = (stopwatch: Stopwatch, event: StopwatchEvent) => void;
+export type StopwatchEvent = 'start' | 'stop' | 'reset' | 'all';
+export type StopwatchListener = (stopwatch: Stopwatch, event: StopwatchEvent) => void;
 
-declare type StopwatchListenerMap = { start: StopwatchListener[], stop: StopwatchListener[], reset: StopwatchListener[], all: StopwatchListener[] };
+type StopwatchListenerMap = { start: StopwatchListener[], stop: StopwatchListener[], reset: StopwatchListener[], all: StopwatchListener[] };
 
 export class Stopwatch {
   private _time = 0;
