@@ -1,10 +1,15 @@
 import type { JSX } from 'solid-js';
 
-import { selection } from './grid-state';
+import { selection, completedNumbers } from './grid-state';
 import { _times } from 'lib/util/general';
 
+function setSelection(value: number): void {
+  if(value < 1 || value > 9 || completedNumbers[value].get()) { return; }
+  selection.set(value);
+}
+
 function NumberCell(props: { value: number }): JSX.Element {
-  return <td class={(props.value % 2 == 0) ? 'even' : 'odd'} classList={{ selected: props.value == selection.get() }} onClick={[selection.set, props.value]}>{props.value}</td>;
+  return <td class={(props.value % 2 == 0) ? 'even' : 'odd'} classList={{ selected: props.value == selection.get(), completed: completedNumbers[props.value].get() }} onClick={[setSelection, props.value]}>{props.value}</td>;
 }
 
 export default function NumberBar(): JSX.Element {

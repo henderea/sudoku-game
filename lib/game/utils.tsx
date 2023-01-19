@@ -14,7 +14,10 @@ export function getAndSet<T>(initialValue: T): GetAndSet<T> {
   return { get, set };
 }
 
-export function memoGetter<T>(func: () => T): Getter<T> {
-  const get = createMemo(func);
+export function getter<T>(get: () => T): Getter<T> {
   return { get };
+}
+
+export function memoGetter<T>(func: () => T): Getter<T> {
+  return getter(createMemo(func));
 }

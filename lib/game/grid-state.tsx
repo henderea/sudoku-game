@@ -7,7 +7,7 @@ import { batch } from 'solid-js';
 import { getAcrossFromNumber, getDownFromNumber, getRegionFromNumber, getRowColFromRegionSubIndex } from 'lib/sudoku/utils';
 import { _times, timeout } from 'lib/util/general';
 import { Swipe } from 'lib/util/Swipe';
-import { getAndSet, memoGetter } from './utils';
+import { getAndSet, getter, memoGetter } from './utils';
 
 export const ERROR_TIMEOUT: number = 500;
 
@@ -201,16 +201,42 @@ export function cellGetter(n: number): Getter<CellData> {
   return memoGetter(() => getCell(n));
 }
 
-function addToSelection(c: number): void {
-  let sel: number = selection.get();
-  sel += c;
-  while(sel > 9) {
-    sel -= 9;
+function countNumber(num: number): number {
+  return data.filter((c: CellData) => c.value.get() == num).length;
+}
+
+export const completedNumbers: Getter<boolean>[] = _times(10, (i: number) => {
+  if(i == 0) {
+    return getter(() => false);
   }
-  while(sel <= 0) {
-    sel += 9;
+  return memoGetter(() => countNumber(i) == 9);
+});
+
+function addToSelection(sel: number, up: boolean): number {
+  sel += up ? 1 : -1;
+  if(sel > 9 || sel < 1) {
+    sel = up ? 1 : 9;
   }
-  selection.set(sel);
+  return sel;
+}
+
+function pickNewSelection(sel: number, up: boolean): number {
+  let s: number = sel;
+  for(let i = 0; i < 9; i++) {
+    s = addToSelection(s, up);
+    if(!completedNumbers[s].get()) {
+      return s;
+    }
+  }
+  return sel;
+}
+
+function updateSelection(up: boolean): void {
+  const sel: number = selection.get();
+  const newSel: number = pickNewSelection(sel, up);
+  if(newSel != sel) {
+    selection.set(newSel);
+  }
 }
 
 function setSelectionHintRemoved(cell: CellData, value: boolean): void {
@@ -221,9 +247,9 @@ function setSelectionHintRemoved(cell: CellData, value: boolean): void {
 
 function handleSwipe(cell: CellData, dir: SwipeDir): void {
   if(dir == 'left') {
-    addToSelection(-1);
+    updateSelection(false);
   } else if(dir == 'right') {
-    addToSelection(1);
+    updateSelection(true);
   } else if(dir == 'up') {
     setSelectionHintRemoved(cell, false);
   } else if(dir == 'down') {
