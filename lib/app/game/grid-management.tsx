@@ -7,8 +7,8 @@ import { storage } from 'lib/util/Storage';
 import { Swipe } from 'lib/util/Swipe';
 
 import { difficultyLevel, loadMenu } from '../menu-state';
-import { completedNumbers, gameComplete, getCell, getCellRC, getCellRS, getData, newHighScore, selection } from './grid-state';
 import { updateScoreInfo } from '../scores/Scores';
+import { completedNumbers, gameComplete, getCell, getCellRC, getCellRS, getData, newHighScore, selection } from './grid-state';
 import { timer } from './TimerDisplay';
 
 export const ERROR_TIMEOUT: number = 500;
