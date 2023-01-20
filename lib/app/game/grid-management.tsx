@@ -2,13 +2,13 @@ import type { SwipeDir } from 'lib/util/Swipe';
 import type { Difficulty } from 'lib/sudoku/difficulty';
 import type { CellData } from './grid-state';
 
-import { timeout } from 'lib/util/general';
+import { formatTimeAsMinutesSeconds, timeout } from 'lib/util/general';
 import { storage } from 'lib/util/Storage';
 import { Swipe } from 'lib/util/Swipe';
 
 import { difficultyLevel, loadMenu } from '../menu-state';
 import { updateScoreInfo } from '../scores/Scores';
-import { completedNumbers, gameComplete, getCell, getCellRC, getCellRS, getData, newHighScore, selection } from './grid-state';
+import { completedNumbers, finalTime, gameComplete, getCell, getCellRC, getCellRS, getData, newHighScore, selection } from './grid-state';
 import { timer } from './TimerDisplay';
 
 export const ERROR_TIMEOUT: number = 500;
@@ -103,6 +103,7 @@ function handleGameCompletion(): void {
       updateScoreInfo(difficulty);
     }
     gameComplete.set(true);
+    finalTime.set(formatTimeAsMinutesSeconds(timer.millis));
     timeout(DONE_TIMEOUT).then(() => loadMenu('postGame'));
   }
 }

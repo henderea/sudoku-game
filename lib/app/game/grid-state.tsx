@@ -15,6 +15,8 @@ export const gameComplete: GetAndSet<boolean> = getAndSetSignal(false);
 
 export const newHighScore: GetAndSet<boolean> = getAndSetSignal(false);
 
+export const finalTime: GetAndSet<string> = getAndSetSignal('0:00');
+
 interface BasicCellData {
   realValue: GetAndSet<number>;
   value: GetAndSet<number>;
