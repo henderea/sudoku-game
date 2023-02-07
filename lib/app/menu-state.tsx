@@ -2,6 +2,7 @@ import type { JSX } from 'solid-js';
 import type { Difficulty } from 'lib/sudoku/difficulty';
 import type { GetAndSet } from './utils';
 
+// import { createContext, onMount, useContext } from 'solid-js';
 import { createContext, useContext } from 'solid-js';
 
 import { getAndSetSignal } from './utils';
@@ -38,6 +39,7 @@ const MenuContext = createContext<MenuState>();
 
 export function MenuProvider(props: { children: any }): JSX.Element {
   const { timer } = useTimer();
+  // const { resetBoard, finalTime, newHighScore } = useGrid();
   const { resetBoard } = useGrid();
   const menuType: GetAndSet<MenuType> = getAndSetSignal('main');
   const difficultyLevel: GetAndSet<Difficulty | null> = getAndSetSignal(null);
@@ -56,6 +58,13 @@ export function MenuProvider(props: { children: any }): JSX.Element {
     timer.start();
   }
   const context: MenuState = { menuType, difficultyLevel, loadMenu, loadGame };
+
+  // onMount(() => {
+  //   newHighScore.set(true);
+  //   difficultyLevel.set('easy');
+  //   finalTime.set('1:01');
+  //   loadMenu('postGame');
+  // });
 
   return (
     <MenuContext.Provider value={context}>

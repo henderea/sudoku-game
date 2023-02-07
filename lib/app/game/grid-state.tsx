@@ -15,6 +15,7 @@ interface BasicCellData {
   value: GetAndSet<number>;
   error: GetAndSet<boolean>;
   filled: Getter<boolean>;
+  justFilled: GetAndSet<boolean>;
   index: number;
   across: number;
   down: number;
@@ -47,27 +48,28 @@ export interface GridState {
 const GridContext = createContext<GridState>();
 
 export function GridProvider(props: { children: any }): JSX.Element {
-  const selection: GetAndSet<number> = getAndSetSignal(1);
-  const gameComplete: GetAndSet<boolean> = getAndSetSignal(false);
-  const newHighScore: GetAndSet<boolean> = getAndSetSignal(false);
-  const finalTime: GetAndSet<string> = getAndSetSignal('0:00');
-  const basicData: BasicCellData[] = Array.from({ length: 81 }, (i: number) => basicCellData(i));
   function basicCellData(index: number): BasicCellData {
     const realValue = getAndSetSignal(0);
     const value = getAndSetSignal(0);
     const error = getAndSetSignal(false);
     const filled = memoGetter(() => value() > 0);
-    const across: number = getAcrossFromNumber(index);
-    const down: number = getDownFromNumber(index);
-    const region: number = getRegionFromNumber(index);
-    const row: number = down == 9 ? 0 : down;
-    const column: number = across == 9 ? 0 : across;
-    return { realValue, value, filled, error, index, across, down, region, row, column };
+    const justFilled = getAndSetSignal(false);
+    const across: number = getAcrossFromNumber(index + 1);
+    const down: number = getDownFromNumber(index + 1);
+    const region: number = getRegionFromNumber(index + 1);
+    const row: number = down - 1;
+    const column: number = across - 1;
+    return { realValue, value, filled, justFilled, error, index, across, down, region, row, column };
   }
+  const selection: GetAndSet<number> = getAndSetSignal(1);
+  const gameComplete: GetAndSet<boolean> = getAndSetSignal(false);
+  const newHighScore: GetAndSet<boolean> = getAndSetSignal(false);
+  const finalTime: GetAndSet<string> = getAndSetSignal('0:00');
+  const basicData: BasicCellData[] = _times(81, (i: number) => basicCellData(i));
   function computeAutoHints(n: number): boolean[] {
     const cell: BasicCellData = basicData[n];
     const { across, down, region } = cell;
-    const remainingValues: boolean[] = [false, false, false, false, false, false, false, false, false, false];
+    const remainingValues: boolean[] = [false, true, true, true, true, true, true, true, true, true];
     for(let i = 0; i < 81; i++) {
       if(i != n) {
         const c: BasicCellData = basicData[i];
@@ -79,8 +81,8 @@ export function GridProvider(props: { children: any }): JSX.Element {
     return remainingValues;
   }
 
-  function computeHints(autoHints: boolean[], removedHints: GetAndSet<boolean>[]): boolean[] {
-    return _times(10, (i: number) => autoHints[i] && !removedHints[i]());
+  function computeHints(filled: boolean, autoHints: boolean[], removedHints: GetAndSet<boolean>[]): boolean[] {
+    return _times(10, (i: number) => !filled && autoHints[i] && !removedHints[i]());
   }
 
   function getAndSetProxyNumber<K extends KeysOfType<BasicCellData, GetAndSet<number>>>(i: number, key: K): GetAndSet<number> {
@@ -103,13 +105,14 @@ export function GridProvider(props: { children: any }): JSX.Element {
     const realValue = getAndSetProxyNumber(index, 'realValue');
     const value = getAndSetProxyNumber(index, 'value');
     const filled = getterProxyBoolean(index, 'filled');
+    const justFilled = getAndSetProxyBoolean(index, 'justFilled');
     const error = getAndSetProxyBoolean(index, 'error');
     const autoHints = memoGetter(() => computeAutoHints(index));
     const removedHints = _times(10, () => getAndSetSignal(false));
-    const hints = memoGetter(() => computeHints(autoHints(), removedHints));
-    const matchesSelection = memoGetter(() => matchesValue(selection(), value(), hints()));
+    const hints = memoGetter(() => computeHints(filled(), autoHints(), removedHints));
+    const matchesSelection = memoGetter(() => filled() && matchesValue(selection(), value(), hints()));
     const { across, down, region, row, column } = basicData[index];
-    return { realValue, value, filled, error, autoHints, removedHints, hints, matchesSelection, index, across, down, region, row, column };
+    return { realValue, value, filled, justFilled, error, autoHints, removedHints, hints, matchesSelection, index, across, down, region, row, column };
   }
 
   const data: CellData[] = _times(81, (i: number) => cellData(i));
@@ -119,7 +122,7 @@ export function GridProvider(props: { children: any }): JSX.Element {
   function getCellRC(r: number, c: number): CellData { return getCell(r * 9 + c); }
   function getCellRS(r: number, s: number): CellData {
     const [row, col] = getRowColFromRegionSubIndex(r, s);
-    return getCellRC(row, col);
+    return getCellRC(row - 1, col - 1);
   }
 
   function cellGetter(n: number): Getter<CellData> {

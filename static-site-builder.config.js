@@ -50,6 +50,11 @@ module.exports = function(env, mode, paths) {
               },
             },
           ]
+        },
+        {
+          test: /\.svg$/,
+          exclude: [/[/\\\\]node_modules[/\\\\]/],
+          use: 'raw-loader'
         }
       ],
       // extra options for the HtmlWebpackPlugin
@@ -87,6 +92,11 @@ module.exports = function(env, mode, paths) {
               },
             },
           ]
+        },
+        {
+          test: /\.svg$/,
+          exclude: [/[/\\\\]node_modules[/\\\\]/],
+          use: 'raw-loader'
         }
       ],
       // extra options for the HtmlWebpackPlugin

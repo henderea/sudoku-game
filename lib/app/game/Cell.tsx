@@ -10,18 +10,18 @@ import { useGrid } from './grid-state';
 function HintCell(props: { cell: CellData, value: number }): JSX.Element {
   const { selection } = useGrid();
   return (
-    <td classList={{ active: props.cell.hints()[props.value] && selection() == props.value }}>
-      {props.cell.hints()[props.value] ? props.value : ''}
+    <td classList={{ matchesSelection: props.cell.hints()[props.value] && selection() == props.value }}>
+      {props.cell.hints()[props.value] ? props.value : '\u00A0'}
     </td>
   );
 }
 
 export default function Cell(props: { index: number }): JSX.Element {
   const { cellGetter } = useGrid();
-  const { setCellToSelectionAndAutocomplete, swipe } = useGridManagement();
+  const { setCellToSelectionAndAutocomplete, swipe, handleKeyPress } = useGridManagement();
   const cell: Getter<CellData> = cellGetter(props.index);
   return (
-    <td classList={{ filled: cell().filled(), matchesSelection: cell().matchesSelection(), error: cell().error() }} onClick={[setCellToSelectionAndAutocomplete, cell()]} onTouchStart={[swipe.touchStart, cell()]} onTouchMove={swipe.touchMove}>
+    <td classList={{ filled: cell().filled(), justFilled: cell().justFilled(), matchesSelection: cell().matchesSelection(), error: cell().error() }} onClick={[setCellToSelectionAndAutocomplete, cell()]} onTouchStart={[swipe.touchStart, cell()]} onTouchMove={swipe.touchMove} onKeyDown={[handleKeyPress, cell()]} tabIndex={0} data-row={cell().row} data-col={cell().column}>
       <Show when={!cell().filled()} fallback={cell().value()}>
         <table class="hintTable">
           <tbody>

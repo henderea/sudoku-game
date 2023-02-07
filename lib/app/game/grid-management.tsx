@@ -16,10 +16,12 @@ import { useTimer } from './TimerDisplay';
 
 export const ERROR_TIMEOUT: number = 500;
 export const DONE_TIMEOUT: number = 500;
+export const JUST_FILLED_TIMEOUT: number = 1000;
 
 export interface GridManagement {
   get swipe(): Swipe<CellData>;
   setCellToSelectionAndAutocomplete(cell: CellData): void;
+  handleKeyPress(cell: CellData, event: KeyboardEvent): void;
 }
 
 const GridManagementContext = createContext<GridManagement>();
@@ -39,6 +41,12 @@ export function GridManagementProvider(props: { children: any }): JSX.Element {
     }
   }
 
+  function setCellAnimated(cell: CellData, value: number): void {
+    cell.value.set(value);
+    cell.justFilled.set(true);
+    timeout(JUST_FILLED_TIMEOUT).then(() => cell.justFilled.set(false));
+  }
+
   function setCellAndAutocomplete(cell: CellData, value: number): boolean {
     if(value <= 0 || value > 9) { return true; }
     if(cell.filled()) {
@@ -47,7 +55,7 @@ export function GridManagementProvider(props: { children: any }): JSX.Element {
     if(cell.realValue() != value) {
       return false;
     }
-    cell.value.set(value);
+    setCellAnimated(cell, value);
     doAutocomplete(cell.index);
     updateSelection(true, true);
     handleGameCompletion();
@@ -56,12 +64,15 @@ export function GridManagementProvider(props: { children: any }): JSX.Element {
 
   function getEmptyRow(row: number): CellData[] {
     const rv: CellData[] = [];
+    console.log(row);
     for(let i = 0; i < 9; i++) {
       const cell: CellData = getCellRC(row, i);
       if(!cell.filled()) {
         rv.push(cell);
+        console.log(cell.value());
       }
     }
+    console.log(rv);
     return rv;
   }
 
@@ -90,7 +101,7 @@ export function GridManagementProvider(props: { children: any }): JSX.Element {
   function fillSingleRemaining(emptyCells: CellData[], updatedIndexes: number[]): void {
     if(emptyCells.length == 1) {
       const cell: CellData = emptyCells[0];
-      cell.value.set(cell.realValue());
+      setCellAnimated(cell, cell.realValue());
       updatedIndexes.push(cell.index);
     }
   }
@@ -98,6 +109,7 @@ export function GridManagementProvider(props: { children: any }): JSX.Element {
   function doAutocomplete(n: number) {
     const updatedIndexes: number[] = [];
     const cell: CellData = getCell(n);
+    console.log(cell);
     fillSingleRemaining(getEmptyRow(cell.row), updatedIndexes);
     fillSingleRemaining(getEmptyCol(cell.column), updatedIndexes);
     fillSingleRemaining(getEmptyRegion(cell.region), updatedIndexes);
@@ -156,6 +168,7 @@ export function GridManagementProvider(props: { children: any }): JSX.Element {
     const sel: number = selection();
     if(sel <= 0 || sel > 9) { return; }
     cell.removedHints[sel].set(value);
+    console.log(sel, value);
   }
 
   function handleSwipe(cell: CellData, dir: SwipeDir): void {
@@ -170,9 +183,24 @@ export function GridManagementProvider(props: { children: any }): JSX.Element {
     }
   }
 
+  function handleKeyPress(cell: CellData, event: KeyboardEvent): void {
+    event.preventDefault();
+    if(/[1-9]/.test(event.key)) {
+      selection.set(parseInt(event.key));
+    } else if(event.key == 'ArrowLeft') {
+      handleSwipe(cell, 'left');
+    } else if(event.key == 'ArrowRight') {
+      handleSwipe(cell, 'right');
+    } else if(event.key == 'ArrowUp') {
+      handleSwipe(cell, 'up');
+    } else if(event.key == 'ArrowDown') {
+      handleSwipe(cell, 'down');
+    }
+  }
+
   const swipe: Swipe<CellData> = new Swipe(handleSwipe);
 
-  const context: GridManagement = { setCellToSelectionAndAutocomplete, swipe };
+  const context: GridManagement = { setCellToSelectionAndAutocomplete, swipe, handleKeyPress };
 
   return (
     <GridManagementContext.Provider value={context}>

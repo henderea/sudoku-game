@@ -9,6 +9,9 @@ import { useTimer } from './TimerDisplay';
 
 import Cell from './Cell';
 
+import CheckIcon from 'resources/check.svg';
+import PauseIcon from 'resources/pause.svg';
+
 function PlayGrid(): JSX.Element {
   return (
     <table class="grid">
@@ -24,11 +27,11 @@ function PlayGrid(): JSX.Element {
 }
 
 function PausedGrid(): JSX.Element {
-  return <div class="pausedGrid"><div class="pausedGridIcon"></div></div>;
+  return <div class="pausedGrid"><div class="pausedGridIcon" innerHTML={PauseIcon}></div></div>;
 }
 
 function DoneGrid(): JSX.Element {
-  return <div class="doneGrid"><div class="doneGridIcon"></div></div>;
+  return <div class="doneGrid"><div class="doneGridIcon" innerHTML={CheckIcon}></div></div>;
 }
 
 export default function Grid(): JSX.Element {

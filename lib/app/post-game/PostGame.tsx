@@ -24,7 +24,7 @@ export default function PostGame(): JSX.Element {
   const loadNewGame = () => loadGame(null);
   return (
     <div class="postGame menu">
-      <Show when={newHighScore()}>
+      <Show when={newHighScore()} fallback={<div class="noNewHighScore">&nbsp;</div>}>
         <div class="newHighScore">New High Score!</div>
       </Show>
       <ScoreInfo/>

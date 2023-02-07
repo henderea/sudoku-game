@@ -12,3 +12,8 @@ declare let process: {
     VERCEL_URL: Optional<string>;
   }
 };
+
+declare module '*.svg' {
+  const content: string;
+  export default content;
+}
