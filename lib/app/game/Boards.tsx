@@ -5,12 +5,10 @@ import { _rand } from 'lib/util/general';
 import { importGenericGrid } from 'lib/sudoku/exportImport';
 import { flip } from 'lib/sudoku/flip';
 
-import { resetBoard } from './grid-state';
-
 import boardsData from 'resources/boards.json';
 
 export interface Boards {
-  loadDifficulty(difficulty: Difficulty): void;
+  loadDifficulty(difficulty: Difficulty, resetBoard: (full: Grid, grid: Grid) => void): void;
 }
 
 class BoardsImpl implements Boards {
@@ -22,7 +20,7 @@ class BoardsImpl implements Boards {
 
   private get boards(): DifficultyMap<Array<{ full: string, grid: string }>> { return this._boards; }
 
-  loadDifficulty(difficulty: Difficulty): void {
+  loadDifficulty(difficulty: Difficulty, resetBoard: (full: Grid, grid: Grid) => void): void {
     const boards: Array<{ full: string, grid: string }> = this.boards[difficulty];
     const board: { full: Grid, grid: Grid } = importGenericGrid(boards[_rand(boards.length)]);
     const { full, grid } = flip(board, 'random');

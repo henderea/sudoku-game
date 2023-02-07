@@ -4,12 +4,12 @@ import { Show } from 'solid-js';
 
 import { _cap } from 'lib/util/general';
 
-import { difficultyLevel, loadGame, loadMenu } from '../menu-state';
-import { finalTime, newHighScore } from '../game/grid-state';
-
-const loadNewGame = () => loadGame(null);
+import { useMenu } from '../menu-state';
+import { useGrid } from '../game/grid-state';
 
 function ScoreInfo(): JSX.Element {
+  const { finalTime } = useGrid();
+  const { difficultyLevel } = useMenu();
   return (
     <div class="scoreInfo">
       <div class="difficulty">{_cap(difficultyLevel() || 'unknown')}</div>
@@ -19,6 +19,9 @@ function ScoreInfo(): JSX.Element {
 }
 
 export default function PostGame(): JSX.Element {
+  const { newHighScore } = useGrid();
+  const { loadGame, loadMenu } = useMenu();
+  const loadNewGame = () => loadGame(null);
   return (
     <div class="postGame menu">
       <Show when={newHighScore()}>

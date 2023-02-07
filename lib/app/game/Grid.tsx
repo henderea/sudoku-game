@@ -4,8 +4,8 @@ import { Match, Switch } from 'solid-js';
 
 import { _times } from 'lib/util/general';
 
-import { gameComplete } from './grid-state';
-import { timer } from './TimerDisplay';
+import { useGrid } from './grid-state';
+import { useTimer } from './TimerDisplay';
 
 import Cell from './Cell';
 
@@ -32,6 +32,8 @@ function DoneGrid(): JSX.Element {
 }
 
 export default function Grid(): JSX.Element {
+  const { gameComplete } = useGrid();
+  const { timer } = useTimer();
   return (
     <Switch fallback={<PausedGrid/>}>
       <Match when={gameComplete()}>

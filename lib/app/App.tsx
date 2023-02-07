@@ -3,11 +3,15 @@ import type { MenuMap } from './menu-state';
 
 import { Dynamic } from 'solid-js/web';
 
-import { menuType } from './menu-state';
+import { MenuProvider, useMenu } from './menu-state';
+
+import { GridManagementProvider } from './game/grid-management';
+import { GridProvider } from './game/grid-state';
+import { TimerProvider } from './game/TimerDisplay';
 
 import MainMenu from './main-menu/MainMenu';
 import DifficultySelect from './difficulty-select/DifficultySelect';
-import Scores from './scores/Scores';
+import Scores, { ScoreProvider } from './scores/Scores';
 import Game from './game/Game';
 import PostGame from './post-game/PostGame';
 
@@ -19,10 +23,27 @@ const menus: MenuMap<() => JSX.Element> = {
   postGame: PostGame
 };
 
+function AppInner(): JSX.Element {
+  const { menuType } = useMenu();
+  return (
+    <ScoreProvider>
+      <GridManagementProvider>
+        <Dynamic component={menus[menuType()]}/>
+      </GridManagementProvider>
+    </ScoreProvider>
+  );
+}
+
 export default function App(): JSX.Element {
   return (
     <>
-      <Dynamic component={menus[menuType()]}/>
+      <GridProvider>
+        <TimerProvider>
+          <MenuProvider>
+            <AppInner/>
+          </MenuProvider>
+        </TimerProvider>
+      </GridProvider>
     </>
   );
 }

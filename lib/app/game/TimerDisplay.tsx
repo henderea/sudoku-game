@@ -1,7 +1,7 @@
 import type { JSX } from 'solid-js';
 import type { GetAndSet } from '../utils';
 
-import { onCleanup } from 'solid-js';
+import { createContext, onCleanup, useContext } from 'solid-js';
 
 import { Stopwatch } from 'lib/util/Stopwatch';
 
@@ -60,9 +60,26 @@ class TimerImpl implements Timer {
   }
 }
 
-export const timer: Timer = new TimerImpl();
+export interface TimerHolder {
+  get timer(): Timer;
+}
+
+const TimerContext = createContext<TimerHolder>();
+
+export function TimerProvider(props: { children: any }): JSX.Element {
+  const timer: Timer = new TimerImpl();
+  const context = { timer };
+  return (
+    <TimerContext.Provider value={context}>
+      {props.children}
+    </TimerContext.Provider>
+  );
+}
+
+export function useTimer(): TimerHolder { return useContext(TimerContext) as TimerHolder; }
 
 export default function TimerDisplay(): JSX.Element {
+  const { timer } = useTimer();
   return (
     <span class="timer" classList={{ running: timer.running() }}>{timer.display()}</span>
   );

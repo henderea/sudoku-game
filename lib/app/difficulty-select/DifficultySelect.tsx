@@ -4,9 +4,10 @@ import type { Difficulty } from 'lib/sudoku/difficulty';
 import { _cap } from 'lib/util/general';
 import { difficulties } from 'lib/sudoku/difficulty';
 
-import { loadGame, loadMenu } from '../menu-state';
+import { useMenu } from '../menu-state';
 
 export default function DifficultySelect(): JSX.Element {
+  const { loadGame, loadMenu } = useMenu();
   return (
     <div class="difficultySelect menu">
       {difficulties.map((d: Difficulty) => (

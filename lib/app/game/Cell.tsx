@@ -4,10 +4,11 @@ import type { Getter } from '../utils';
 
 import { Show } from 'solid-js';
 
-import { setCellToSelectionAndAutocomplete, swipe } from './grid-management';
-import { cellGetter, selection } from './grid-state';
+import { useGridManagement } from './grid-management';
+import { useGrid } from './grid-state';
 
 function HintCell(props: { cell: CellData, value: number }): JSX.Element {
+  const { selection } = useGrid();
   return (
     <td classList={{ active: props.cell.hints()[props.value] && selection() == props.value }}>
       {props.cell.hints()[props.value] ? props.value : ''}
@@ -16,6 +17,8 @@ function HintCell(props: { cell: CellData, value: number }): JSX.Element {
 }
 
 export default function Cell(props: { index: number }): JSX.Element {
+  const { cellGetter } = useGrid();
+  const { setCellToSelectionAndAutocomplete, swipe } = useGridManagement();
   const cell: Getter<CellData> = cellGetter(props.index);
   return (
     <td classList={{ filled: cell().filled(), matchesSelection: cell().matchesSelection(), error: cell().error() }} onClick={[setCellToSelectionAndAutocomplete, cell()]} onTouchStart={[swipe.touchStart, cell()]} onTouchMove={swipe.touchMove}>

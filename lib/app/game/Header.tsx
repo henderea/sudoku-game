@@ -1,8 +1,9 @@
 import type { JSX } from 'solid-js';
 
-import TimerDisplay, { timer } from './TimerDisplay';
+import TimerDisplay, { useTimer } from './TimerDisplay';
 
 function PlayPauseButton(): JSX.Element {
+  const { timer } = useTimer();
   return <div class={timer.running() ? 'pauseButton' : 'playButton'} onClick={timer.toggle}></div>;
 }
 
