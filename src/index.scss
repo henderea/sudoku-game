@@ -1,0 +1,69 @@
+body, html {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+#app {
+  width: 100%;
+  height: 100%;
+  font-family: Arial, sans-serif;
+  background-color: #333;
+  color: #f0f0f0;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+
+.menuButton {
+  border: 3px solid #f0f0f0;
+  border-radius: 25px;
+  font-size: 20px;
+  display: table;
+  padding: 10px;
+  margin: 10px auto;
+  background-color: #38f;
+  color: #f0f0f0;
+  white-space: nowrap;
+  width: 200px;
+  text-align: center;
+
+  &.backButton {
+    background-color: #e00;
+  }
+}
+
+.menuSpacer {
+  height: 30px;
+}
+
+.scoreEntry {
+  margin: 10px auto;
+  text-align: center;
+  font-size: 15px;
+  border: 1px solid #f0f0f0;
+  border-radius: 10px;
+  padding: 10px;
+  width: 200px;
+
+  &.easy {
+    background-color: #03c;
+  }
+
+  &.medium {
+    background-color: #0a0;
+  }
+
+  &.hard {
+    background-color: #a33;
+  }
+
+  .difficulty {
+    font-size: 20px;
+    margin-bottom: 5px;
+  }
+}

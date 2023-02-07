@@ -27,7 +27,7 @@ export function updateScoreInfos(): void {
 
 function ScoreEntry(props: { difficulty: Difficulty }): JSX.Element {
   return (
-    <div class="scoreEntry" classList={{ notPlayed: times[props.difficulty]() === null }}>
+    <div class={`scoreEntry ${props.difficulty}`} classList={{ notPlayed: times[props.difficulty]() === null }}>
       <div class="difficulty">{_cap(props.difficulty)}</div>
       <div class="bestTime">{times[props.difficulty]() || 'Not Played'}</div>
       <div class="count">{counts[props.difficulty]()}</div>
@@ -38,12 +38,12 @@ function ScoreEntry(props: { difficulty: Difficulty }): JSX.Element {
 export default function Scores(): JSX.Element {
   onMount(() => updateScoreInfos());
   return (
-    <div class="scoresScreen">
+    <div class="scoresScreen menu">
       {difficulties.map((d: Difficulty) => (
         <ScoreEntry difficulty={d}/>
       ))}
       <div class="menuSpacer"></div>
-      <div class="menuButton" onClick={[loadMenu, 'main']}>Back</div>
+      <div class="menuButton backButton" onClick={[loadMenu, 'main']}>Back</div>
     </div>
   );
 }

@@ -23,7 +23,7 @@ export type MenuMap<T> = Record<MenuType, T>;
 
 export const menus: MenuType[] = Object.keys(menuMeta) as MenuType[];
 
-export const menuType: GetAndSet<MenuType> = getAndSetSignal('main');
+export const menuType: GetAndSet<MenuType> = getAndSetSignal('scores');
 
 export const difficultyLevel: GetAndSet<Difficulty | null> = getAndSetSignal(null);
 

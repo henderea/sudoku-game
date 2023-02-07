@@ -20,7 +20,7 @@ function ScoreInfo(): JSX.Element {
 
 export default function PostGame(): JSX.Element {
   return (
-    <div class="postGame">
+    <div class="postGame menu">
       <Show when={newHighScore()}>
         <div class="newHighScore">New High Score!</div>
       </Show>

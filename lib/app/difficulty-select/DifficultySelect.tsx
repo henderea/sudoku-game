@@ -8,12 +8,12 @@ import { loadGame, loadMenu } from '../menu-state';
 
 export default function DifficultySelect(): JSX.Element {
   return (
-    <div class="difficultySelect">
+    <div class="difficultySelect menu">
       {difficulties.map((d: Difficulty) => (
-        <div class="menuButton" onClick={[loadGame, d]}>{_cap(d)}</div>
+        <div class={`menuButton ${d}`} onClick={[loadGame, d]}>{_cap(d)}</div>
       ))}
       <div class="menuSpacer"></div>
-      <div class="menuButton" onClick={[loadMenu, 'main']}>Back</div>
+      <div class="menuButton backButton" onClick={[loadMenu, 'main']}>Back</div>
     </div>
   );
 }
