@@ -164,6 +164,7 @@ html {
     border-collapse: collapse;
     width: 424px;
     height: 424px;
+    table-layout: fixed;
 
     tr {
       &:nth-child(3n + 1) {
@@ -228,8 +229,9 @@ html {
 
         .hintTable {
           margin: auto;
-          width: 39px;
-          height: 39px;
+          width: 36px;
+          height: 36px;
+          table-layout: fixed;
 
           td {
             width: 33%;
