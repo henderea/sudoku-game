@@ -24,14 +24,16 @@ export class Swipe<T> {
     this.yStart = -1;
   }
 
-  touchStart(key: T, event: TouchEvent): void {
-    this.key = key;
+  touchStart(key: T | null, event: TouchEvent): void {
+    if(key) {
+      this.key = key;
+    }
     const firstTouch: Touch = event.touches[0];
     this.xStart = firstTouch.clientX;
     this.yStart = firstTouch.clientY;
   }
 
-  touchMove(event: TouchEvent): void {
+  touchEnd(event: TouchEvent): void {
     if(this.xStart < 0 || this.yStart < 0 || this.key === undefined) { return; }
     const firstTouch: Touch = event.touches[0];
     const xEnd: number = firstTouch.clientX;
