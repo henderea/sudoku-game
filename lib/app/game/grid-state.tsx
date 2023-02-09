@@ -147,10 +147,13 @@ export function GridProvider(props: { children: any }): JSX.Element {
       gameComplete.set(false);
       selection.set(1);
       newHighScore.set(false);
+      finalTime.set('0:00');
       for(let i = 0; i < 81; i++) {
         const cell: CellData = getCell(i);
         cell.realValue.set(full.get(i).value);
         cell.value.set(grid.get(i).value);
+        cell.error.set(false);
+        cell.justFilled.set(false);
         for(let j = 0; j <= 9; j++) {
           cell.removedHints[j].set(false);
         }
