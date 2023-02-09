@@ -83,12 +83,12 @@ html {
 @keyframes justFilled {
   from {
     background-color: $lighter-blue;
-    font-size: 40px;
+    font-size: 30px;
   }
 
   to {
     background-color: $dark-gray;
-    font-size: 24px;
+    font-size: 20px;
   }
 }
 
@@ -159,8 +159,8 @@ html {
 
   .grid {
     border-collapse: collapse;
-    width: 476px;
-    height: 476px;
+    width: 424px;
+    height: 424px;
 
     tr {
       &:nth-child(3n + 1) {
@@ -181,13 +181,13 @@ html {
         text-align: center;
         vertical-align: middle;
         padding: 2px;
-        font-size: 24px;
-        width: 48px;
-        min-width: 48px;
-        max-width: 48px;
-        height: 48px;
-        min-height: 48px;
-        max-height: 48px;
+        font-size: 20px;
+        width: 40px;
+        min-width: 40px;
+        max-width: 40px;
+        height: 40px;
+        min-height: 40px;
+        max-height: 40px;
 
         &:nth-child(3n + 1) {
           border-left-width: 4px;
@@ -225,8 +225,8 @@ html {
 
         .hintTable {
           margin: auto;
-          width: 48px;
-          height: 48px;
+          width: 39px;
+          height: 39px;
 
           td {
             width: 33%;
@@ -237,7 +237,7 @@ html {
             max-height: 33%;
             border: none;
             padding: 0;
-            font-size: 10px;
+            font-size: 9px;
           }
         }
       }
