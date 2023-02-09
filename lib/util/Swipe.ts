@@ -18,7 +18,7 @@ export class Swipe<T> {
   private set yStart(value: number) { this._yStart = value; }
 
   private onSwipe(dir: SwipeDir, diff: number): void {
-    if(diff > 50) {
+    if(Math.abs(diff) > 50) {
       this._onSwipe(this.key as T, dir);
     }
     this.key = undefined;
