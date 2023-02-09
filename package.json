@@ -1,7 +1,7 @@
 {
   "name": "sudoku-game",
   "version": "1.0.0",
-  "description": "A sudoku game using KnockoutJS",
+  "description": "A sudoku game using SolidJS",
   "main": "",
   "scripts": {
     "lint": "eslint .",
