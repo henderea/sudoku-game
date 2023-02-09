@@ -28,6 +28,7 @@ export interface CellData extends BasicCellData {
   autoHints: Getter<boolean[]>;
   removedHints: GetAndSet<boolean>[];
   hints: Getter<boolean[]>;
+  hintCount: Getter<number>;
   matchesSelection: Getter<boolean>;
 }
 
@@ -82,7 +83,7 @@ export function GridProvider(props: { children: any }): JSX.Element {
   }
 
   function computeHints(filled: boolean, autoHints: boolean[], removedHints: GetAndSet<boolean>[]): boolean[] {
-    return _times(10, (i: number) => !filled && autoHints[i] && !removedHints[i]());
+    return _times(10, (i: number) => i > 0 && !filled && autoHints[i] && !removedHints[i]());
   }
 
   function getAndSetProxyNumber<K extends KeysOfType<BasicCellData, GetAndSet<number>>>(i: number, key: K): GetAndSet<number> {
@@ -110,9 +111,10 @@ export function GridProvider(props: { children: any }): JSX.Element {
     const autoHints = memoGetter(() => computeAutoHints(index));
     const removedHints = _times(10, () => getAndSetSignal(false));
     const hints = memoGetter(() => computeHints(filled(), autoHints(), removedHints));
-    const matchesSelection = memoGetter(() => filled() && matchesValue(selection(), value(), hints()));
+    const hintCount = memoGetter(() => hints().filter((h) => h).length);
+    const matchesSelection = memoGetter(() => matchesValue(selection(), value(), hints()));
     const { across, down, region, row, column } = basicData[index];
-    return { realValue, value, filled, justFilled, error, autoHints, removedHints, hints, matchesSelection, index, across, down, region, row, column };
+    return { realValue, value, filled, justFilled, error, autoHints, removedHints, hints, hintCount, matchesSelection, index, across, down, region, row, column };
   }
 
   const data: CellData[] = _times(81, (i: number) => cellData(i));

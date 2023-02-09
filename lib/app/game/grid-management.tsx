@@ -14,8 +14,8 @@ import { useScores } from '../scores/Scores';
 import { useGrid } from './grid-state';
 import { useTimer } from './TimerDisplay';
 
-export const ERROR_TIMEOUT: number = 500;
-export const DONE_TIMEOUT: number = 500;
+export const ERROR_TIMEOUT: number = 1000;
+export const DONE_TIMEOUT: number = 1000;
 export const JUST_FILLED_TIMEOUT: number = 1000;
 
 export interface GridManagement {
@@ -185,6 +185,9 @@ export function GridManagementProvider(props: { children: any }): JSX.Element {
 
   function handleKeyPress(cell: CellData, event: KeyboardEvent): void {
     event.preventDefault();
+    if(event.key == ' ') {
+      timer.stop();
+    }
     if(/[1-9]/.test(event.key)) {
       selection.set(parseInt(event.key));
     } else if(event.key == 'ArrowLeft') {

@@ -1,3 +1,10 @@
+$light-blue: #03c;
+$lighter-blue: #38f;
+$light-green: #3f6;
+$light-red: #e00;
+$dim-white: #f0f0f0;
+$dark-gray: #333;
+
 body,
 html {
   width: 100%;
@@ -9,8 +16,8 @@ html {
   width: 100%;
   height: 100%;
   font-family: Arial, sans-serif;
-  background-color: #333;
-  color: #f0f0f0;
+  background-color: $dark-gray;
+  color: $dim-white;
 }
 
 .menu {
@@ -23,20 +30,21 @@ html {
 }
 
 .menuButton {
-  border: 3px solid #f0f0f0;
+  cursor: pointer;
+  border: 3px solid $dim-white;
   border-radius: 25px;
   font-size: 20px;
   display: table;
   padding: 10px;
   margin: 10px auto;
-  background-color: #38f;
-  color: #f0f0f0;
+  background-color: $lighter-blue;
+  color: $dim-white;
   white-space: nowrap;
   width: 200px;
   text-align: center;
 
   &.backButton {
-    background-color: #e00;
+    background-color: $light-red;
   }
 }
 
@@ -49,13 +57,13 @@ html {
   margin: 10px auto;
   text-align: center;
   font-size: 15px;
-  border: 1px solid #f0f0f0;
+  border: 1px solid $dim-white;
   border-radius: 10px;
   padding: 10px;
   width: 200px;
 
   &.easy {
-    background-color: #03c;
+    background-color: $light-blue;
   }
 
   &.medium {
@@ -74,25 +82,23 @@ html {
 
 @keyframes justFilled {
   from {
-    color: #03c;
-    font-size: 30px;
+    background-color: $lighter-blue;
+    font-size: 40px;
   }
 
   to {
-    color: #f0f0f0;
+    background-color: $dark-gray;
     font-size: 24px;
   }
 }
 
-@keyframes justFilledActive {
+@keyframes justErrored {
   from {
-    color: #03c;
-    font-size: 30px;
+    background-color: $light-red;
   }
 
   to {
-    color: #3f6;
-    font-size: 24px;
+    background-color: $dark-gray;
   }
 }
 
@@ -101,9 +107,34 @@ html {
   margin: auto;
 
   .header {
-    text-align: right;
     font-size: 24px;
-    margin-bottom: 10px;
+    margin: 10px 0;
+    overflow: hidden;
+    height: 30px;
+
+    .leftSide {
+      display: inline-block;
+    }
+
+    .backButton {
+      cursor: pointer;
+      border: 2px solid $dim-white;
+      border-radius: 25px;
+      font-size: 12px;
+      display: inline-block;
+      padding: 5px;
+      background-color: $light-red;
+      color: $dim-white;
+      white-space: nowrap;
+      width: 50px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .rightSide {
+      float: right;
+      text-align: right;
+    }
 
     .timerContainer {
       display: inline-block;
@@ -146,6 +177,7 @@ html {
 
       td {
         border: 2px solid #fff;
+        color: $dim-white;
         text-align: center;
         vertical-align: middle;
         padding: 2px;
@@ -166,7 +198,7 @@ html {
         }
 
         &.matchesSelection {
-          color: #3f6;
+          color: $light-green;
         }
 
         &:focus-visible {
@@ -176,9 +208,18 @@ html {
         &.justFilled {
           animation-name: justFilled;
           animation-duration: 1s;
+        }
+
+        &.error {
+          animation-name: justErrored;
+          animation-duration: 1s;
+        }
+
+        &.singleHint {
+          box-shadow: inset 0 0 3px 3px $lighter-blue;
 
           &.matchesSelection {
-            animation-name: justFilledActive;
+            box-shadow: inset 0 0 3px 3px $light-green;
           }
         }
 
@@ -210,7 +251,19 @@ html {
     margin-top: 10px;
 
     .selected {
-      color: #3f6;
+      color: $light-green;
+    }
+
+    .even {
+      padding-top: 30px;
+    }
+
+    .odd {
+      padding-bottom: 30px;
+    }
+
+    .completed {
+      color: transparent;
     }
   }
 
@@ -252,7 +305,7 @@ html {
       left: 50%;
       margin-top: -100px;
       margin-left: -100px;
-      color: #3f6;
+      color: $light-green;
 
       svg {
         width: 200px;
@@ -267,7 +320,7 @@ html {
     font-size: 30px;
     text-align: center;
     margin-bottom: 10px;
-    color: #3f6;
+    color: $light-green;
     height: 50px;
   }
 
@@ -278,7 +331,7 @@ html {
 
   .scoreInfo {
     text-align: center;
-    border: 2px solid #f0f0f0;
+    border: 2px solid $dim-white;
     margin: 10px auto;
     padding: 20px 10px;
     border-radius: 10px;

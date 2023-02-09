@@ -21,7 +21,7 @@ export default function Cell(props: { index: number }): JSX.Element {
   const { setCellToSelectionAndAutocomplete, swipe, handleKeyPress } = useGridManagement();
   const cell: Getter<CellData> = cellGetter(props.index);
   return (
-    <td classList={{ filled: cell().filled(), justFilled: cell().justFilled(), matchesSelection: cell().matchesSelection(), error: cell().error() }} onClick={[setCellToSelectionAndAutocomplete, cell()]} onTouchStart={[swipe.touchStart, cell()]} onTouchMove={swipe.touchMove} onKeyDown={[handleKeyPress, cell()]} tabIndex={0} data-row={cell().row} data-col={cell().column}>
+    <td classList={{ filled: cell().filled(), justFilled: cell().justFilled(), matchesSelection: cell().matchesSelection(), error: cell().error(), singleHint: cell().hintCount() == 1 }} onClick={[setCellToSelectionAndAutocomplete, cell()]} onTouchStart={[swipe.touchStart, cell()]} onTouchMove={swipe.touchMove} onKeyDown={[handleKeyPress, cell()]} tabIndex={0} data-row={cell().row} data-col={cell().column}>
       <Show when={!cell().filled()} fallback={cell().value()}>
         <table class="hintTable">
           <tbody>

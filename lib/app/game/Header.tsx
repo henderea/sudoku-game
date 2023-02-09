@@ -1,5 +1,6 @@
 import type { JSX } from 'solid-js';
 
+import { useMenu } from '../menu-state';
 import TimerDisplay, { useTimer } from './TimerDisplay';
 
 import PauseIcon from 'resources/pause.svg';
@@ -11,10 +12,16 @@ function PlayPauseButton(): JSX.Element {
 }
 
 export default function Header(): JSX.Element {
+  const { loadMenu } = useMenu();
   return (
     <div class="header">
-      <div class="timerContainer"><TimerDisplay/></div>
-      <div class="playPauseContainer"><PlayPauseButton/></div>
+      <div class="leftSide">
+        <div class="backButton" onClick={[loadMenu, 'main']}>Back</div>
+      </div>
+      <div class="rightSide">
+        <div class="timerContainer"><TimerDisplay/></div>
+        <div class="playPauseContainer"><PlayPauseButton/></div>
+      </div>
     </div>
   );
 }

@@ -60,10 +60,11 @@ export function MenuProvider(props: { children: any }): JSX.Element {
   const context: MenuState = { menuType, difficultyLevel, loadMenu, loadGame };
 
   // onMount(() => {
-  //   newHighScore.set(true);
-  //   difficultyLevel.set('easy');
-  //   finalTime.set('1:01');
-  //   loadMenu('postGame');
+  //   // newHighScore.set(true);
+  //   // difficultyLevel.set('easy');
+  //   // finalTime.set('1:01');
+  //   // loadMenu('postGame');
+  //   // loadGame('easy');
   // });
 
   return (

@@ -27,7 +27,8 @@ function PlayGrid(): JSX.Element {
 }
 
 function PausedGrid(): JSX.Element {
-  return <div class="pausedGrid"><div class="pausedGridIcon" innerHTML={PauseIcon}></div></div>;
+  const { timer } = useTimer();
+  return <div class="pausedGrid" onClick={() => timer.start()}><div class="pausedGridIcon" innerHTML={PauseIcon}></div></div>;
 }
 
 function DoneGrid(): JSX.Element {
