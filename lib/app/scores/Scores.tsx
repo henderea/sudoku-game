@@ -16,6 +16,7 @@ export interface ScoreHolder {
   get counts(): DifficultyMap<GetAndSet<number>>;
   updateScoreInfo(d: Difficulty): void;
   updateScoreInfos(): void;
+  resetScores(): void;
 }
 
 const ScoreContext = createContext<ScoreHolder>();
@@ -34,7 +35,12 @@ export function ScoreProvider(props: { children: any }): JSX.Element {
     difficulties.forEach(updateScoreInfo);
   }
 
-  const context: ScoreHolder = { times, counts, updateScoreInfo, updateScoreInfos };
+  function resetScores(): void {
+    storage.resetTimes().resetPlayCounts();
+    updateScoreInfos();
+  }
+
+  const context: ScoreHolder = { times, counts, updateScoreInfo, updateScoreInfos, resetScores };
 
   return (
     <ScoreContext.Provider value={context}>
@@ -58,13 +64,14 @@ function ScoreEntry(props: { difficulty: Difficulty }): JSX.Element {
 
 export default function Scores(): JSX.Element {
   const { loadMenu } = useMenu();
-  const { updateScoreInfos } = useScores();
+  const { updateScoreInfos, resetScores } = useScores();
   onMount(() => updateScoreInfos());
   return (
     <div class="scoresScreen menu">
       {difficulties.map((d: Difficulty) => (
         <ScoreEntry difficulty={d}/>
       ))}
+      <div class="menuButton" onClick={resetScores}>Reset</div>
       <div class="menuSpacer"></div>
       <div class="menuButton backButton" onClick={[loadMenu, 'main']}>Back</div>
     </div>

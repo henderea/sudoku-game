@@ -16,6 +16,9 @@ export interface Storage {
 
   incrementPlayCount(difficulty: Difficulty): Storage;
 
+  resetTimes(): Storage;
+  resetPlayCounts(): Storage;
+
   loadTimes(): Storage;
   saveTimes(): Storage;
 
@@ -61,6 +64,16 @@ class StorageImpl implements Storage {
   incrementPlayCount(difficulty: Difficulty): Storage {
     this.autoLoad('loadPlayCounts');
     this.playCounts[difficulty] = this.playCounts[difficulty] + 1;
+    return this.autoSave('savePlayCounts');
+  }
+
+  resetTimes(): Storage {
+    this.bestTimes = emptyDifficultyMap();
+    return this.autoSave('saveTimes');
+  }
+
+  resetPlayCounts(): Storage {
+    this.playCounts = emptyDifficultyMap();
     return this.autoSave('savePlayCounts');
   }
 

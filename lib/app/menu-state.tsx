@@ -55,6 +55,7 @@ export function MenuProvider(props: { children: any }): JSX.Element {
     difficultyLevel.set(difficulty);
     loadMenu('game');
     boards.loadDifficulty(difficulty, resetBoard);
+    timer.reset();
     timer.start();
   }
   const context: MenuState = { menuType, difficultyLevel, loadMenu, loadGame };
