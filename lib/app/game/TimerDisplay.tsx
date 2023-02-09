@@ -31,7 +31,10 @@ class TimerImpl implements Timer {
   constructor() {
     this._stopwatch = new Stopwatch();
     this._running = getAndSetSignal(false);
-    this.stopwatch.on('all', (s: Stopwatch) => this._running.set(s.running));
+    this.stopwatch.on('all', (s: Stopwatch) => {
+      this._running.set(s.running);
+      this._timeDisplay.set(s.currentTime);
+    });
     this._timeDisplay = getAndSetSignal('0:00');
     onCleanup(() => this.clearTimerInterval());
   }
