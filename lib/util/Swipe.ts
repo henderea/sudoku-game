@@ -17,17 +17,17 @@ export class Swipe<T> {
   private get yStart(): number { return this._yStart; }
   private set yStart(value: number) { this._yStart = value; }
 
-  private onSwipe(dir: SwipeDir): void {
-    this._onSwipe(this.key as T, dir);
+  private onSwipe(dir: SwipeDir, diff: number): void {
+    if(diff > 50) {
+      this._onSwipe(this.key as T, dir);
+    }
     this.key = undefined;
     this.xStart = -1;
     this.yStart = -1;
   }
 
-  touchStart(key: T | null, event: TouchEvent): void {
-    if(key) {
-      this.key = key;
-    }
+  touchStart(key: T, event: TouchEvent): void {
+    this.key = key;
     const firstTouch: Touch = event.touches[0];
     this.xStart = firstTouch.clientX;
     this.yStart = firstTouch.clientY;
@@ -35,15 +35,15 @@ export class Swipe<T> {
 
   touchEnd(event: TouchEvent): void {
     if(this.xStart < 0 || this.yStart < 0 || this.key === undefined) { return; }
-    const firstTouch: Touch = event.touches[0];
+    const firstTouch: Touch = event.changedTouches[0];
     const xEnd: number = firstTouch.clientX;
     const yEnd: number = firstTouch.clientY;
     const xDiff: number = xEnd - this.xStart;
     const yDiff: number = yEnd - this.yStart;
     if(Math.abs(xDiff) > Math.abs(yDiff)) {
-      this.onSwipe(xDiff > 0 ? 'right' : 'left');
+      this.onSwipe(xDiff > 0 ? 'right' : 'left', xDiff);
     } else {
-      this.onSwipe(yDiff > 0 ? 'down' : 'up');
+      this.onSwipe(yDiff > 0 ? 'down' : 'up', yDiff);
     }
   }
 }

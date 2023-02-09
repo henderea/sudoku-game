@@ -30,7 +30,7 @@ export default function PostGame(): JSX.Element {
       <ScoreInfo/>
       <div class="menuSpacer"></div>
       <div class="menuButton" onClick={loadNewGame}>New Game</div>
-      <div class="menuButton" onClick={[loadMenu, 'main']}>Back to Main Menu</div>
+      <div class="menuButton backButton" onClick={[loadMenu, 'main']}>Back to Main Menu</div>
     </div>
   );
 }

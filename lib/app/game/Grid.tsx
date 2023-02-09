@@ -4,7 +4,6 @@ import { Match, Switch } from 'solid-js';
 
 import { _times } from 'lib/util/general';
 
-import { useGridManagement } from './grid-management';
 import { useGrid } from './grid-state';
 import { useTimer } from './TimerDisplay';
 
@@ -14,9 +13,8 @@ import CheckIcon from 'resources/check.svg';
 import PauseIcon from 'resources/pause.svg';
 
 function PlayGrid(): JSX.Element {
-  const { swipe } = useGridManagement();
   return (
-    <table class="grid" onTouchStart={[swipe.touchStart, null]} onTouchEnd={swipe.touchEnd}>
+    <table class="grid">
       {_times(9, (row: number) => (
         <tr>
           {_times(9, (column: number) => (

@@ -64,15 +64,12 @@ export function GridManagementProvider(props: { children: any }): JSX.Element {
 
   function getEmptyRow(row: number): CellData[] {
     const rv: CellData[] = [];
-    console.log(row);
     for(let i = 0; i < 9; i++) {
       const cell: CellData = getCellRC(row, i);
       if(!cell.filled()) {
         rv.push(cell);
-        console.log(cell.value());
       }
     }
-    console.log(rv);
     return rv;
   }
 
@@ -109,7 +106,6 @@ export function GridManagementProvider(props: { children: any }): JSX.Element {
   function doAutocomplete(n: number) {
     const updatedIndexes: number[] = [];
     const cell: CellData = getCell(n);
-    console.log(cell);
     fillSingleRemaining(getEmptyRow(cell.row), updatedIndexes);
     fillSingleRemaining(getEmptyCol(cell.column), updatedIndexes);
     fillSingleRemaining(getEmptyRegion(cell.region), updatedIndexes);
@@ -168,7 +164,6 @@ export function GridManagementProvider(props: { children: any }): JSX.Element {
     const sel: number = selection();
     if(sel <= 0 || sel > 9) { return; }
     cell.removedHints[sel].set(value);
-    console.log(sel, value);
   }
 
   function handleSwipe(cell: CellData, dir: SwipeDir): void {
