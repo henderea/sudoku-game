@@ -67,7 +67,7 @@ export function timeout(millis: number): Promise<void> {
   return new Promise((resolve) => setTimeout(() => resolve(), millis));
 }
 
-export const DEPLOYMENT_ID: string = process.env.VERCEL_URL ? process.env.VERCEL_URL.replace(/^.*-([a-zA-Z0-9]+)(-[^-]+)?\.vercel\.app.*$/, '$1') : 'N/A';
+export const DEPLOYMENT_ID: string = process.env.VERCEL_URL ? process.env.VERCEL_URL.replace(/^.*[/]([a-zA-Z0-9]+)$/, '$1') : 'N/A';
 
 export const BUILD_DATE: Date = new Date(parseInt(process.env.BUILD_TIME));
 
