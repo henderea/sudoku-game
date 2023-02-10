@@ -24,13 +24,17 @@ export default function PostGame(): JSX.Element {
   const loadNewGame = () => loadGame(null);
   return (
     <div class="postGame menu">
+      <div class="menuSpacer noBottom"></div>
       <Show when={newHighScore()} fallback={<div class="noNewHighScore">&nbsp;</div>}>
         <div class="newHighScore">New High Score!</div>
       </Show>
       <ScoreInfo/>
       <div class="menuSpacer"></div>
+      <div class="menuSpacer"></div>
       <div class="menuButton" onClick={loadNewGame}>New Game</div>
+      <div class="menuSpacer"></div>
       <div class="menuButton backButton" onClick={[loadMenu, 'main']}>Back to Main Menu</div>
+      <div class="menuSpacer"></div>
     </div>
   );
 }

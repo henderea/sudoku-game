@@ -1,9 +1,10 @@
 $light-blue: #03c;
 $lighter-blue: #38f;
 $light-green: #3f6;
+$dark-green: #242;
 $light-red: #e00;
 $dim-white: #f0f0f0;
-$dark-gray: #333;
+$dark-gray: #222;
 
 body,
 html {
@@ -48,12 +49,21 @@ html {
 
   &.backButton {
     background-color: $light-red;
+    margin-bottom: auto;
   }
 }
 
 .menuSpacer {
   height: 30px;
   margin: auto;
+
+  &.noTop {
+    margin-top: 0;
+  }
+
+  &.noBottom {
+    margin-bottom: 0;
+  }
 }
 
 .scoreEntry {
@@ -95,6 +105,18 @@ html {
   }
 }
 
+@keyframes justFilledActive {
+  from {
+    background-color: $lighter-blue;
+    font-size: 30px;
+  }
+
+  to {
+    background-color: $dark-green;
+    font-size: 20px;
+  }
+}
+
 @keyframes justErrored {
   from {
     background-color: $light-red;
@@ -102,6 +124,16 @@ html {
 
   to {
     background-color: $dark-gray;
+  }
+}
+
+@keyframes justErroredActive {
+  from {
+    background-color: $light-red;
+  }
+
+  to {
+    background-color: $dark-green;
   }
 }
 
@@ -202,7 +234,8 @@ html {
         }
 
         &.matchesSelection {
-          color: $light-green;
+          // color: $light-green;
+          background-color: $dark-green;
         }
 
         &:focus-visible {
@@ -212,18 +245,26 @@ html {
         &.justFilled {
           animation-name: justFilled;
           animation-duration: 1s;
+
+          &.matchesSelection {
+            animation-name: justFilledActive;
+          }
         }
 
         &.error {
           animation-name: justErrored;
           animation-duration: 1s;
+
+          &.matchesSelection {
+            animation-name: justErroredActive;
+          }
         }
 
         &.singleHint {
-          box-shadow: inset 0 0 3px 3px $lighter-blue;
+          box-shadow: inset 0 0 4px 4px $lighter-blue;
 
           &.matchesSelection {
-            box-shadow: inset 0 0 3px 3px $light-green;
+            box-shadow: inset 0 0 4px 4px $light-green;
           }
         }
 
@@ -243,6 +284,7 @@ html {
             border: none;
             padding: 0;
             font-size: 9px;
+            background-color: transparent !important;
           }
         }
       }
@@ -345,6 +387,37 @@ html {
     .difficulty {
       font-size: 24px;
       margin-bottom: 5px;
+    }
+  }
+}
+
+.settingsMenu {
+  .infoPanel {
+    width: auto;
+    margin: 0 auto;
+    border: 2px solid $dim-white;
+    border-radius: 20px;
+    overflow: hidden;
+    padding: 10px;
+
+    .infoTable {
+      border-collapse: collapse;
+      text-align: center;
+
+      th,
+      td {
+        padding: 5px;
+      }
+
+      th {
+        font-size: 24px;
+      }
+
+      .buildId {
+        td {
+          padding-bottom: 20px;
+        }
+      }
     }
   }
 }

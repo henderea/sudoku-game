@@ -68,6 +68,7 @@ export default function Scores(): JSX.Element {
   onMount(() => updateScoreInfos());
   return (
     <div class="scoresScreen menu">
+      <div class="menuSpacer noBottom"></div>
       {difficulties.map((d: Difficulty) => (
         <ScoreEntry difficulty={d}/>
       ))}

@@ -19,7 +19,8 @@ export const menuMeta = {
   difficultySelect: menuMetaItem(false),
   scores: menuMetaItem(false),
   game: menuMetaItem(true),
-  postGame: menuMetaItem(true)
+  postGame: menuMetaItem(true),
+  settings: menuMetaItem(false),
 } as const;
 
 export type MenuType = keyof typeof menuMeta;

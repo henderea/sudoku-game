@@ -14,13 +14,15 @@ import DifficultySelect from './difficulty-select/DifficultySelect';
 import Scores, { ScoreProvider } from './scores/Scores';
 import Game from './game/Game';
 import PostGame from './post-game/PostGame';
+import Settings from './settings/Settings';
 
 const menus: MenuMap<() => JSX.Element> = {
   main: MainMenu,
   difficultySelect: DifficultySelect,
   scores: Scores,
   game: Game,
-  postGame: PostGame
+  postGame: PostGame,
+  settings: Settings
 };
 
 function AppInner(): JSX.Element {

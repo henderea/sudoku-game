@@ -10,6 +10,7 @@ export default function DifficultySelect(): JSX.Element {
   const { loadGame, loadMenu } = useMenu();
   return (
     <div class="difficultySelect menu">
+      <div class="menuSpacer noBottom"></div>
       {difficulties.map((d: Difficulty) => (
         <div class={`menuButton ${d}`} onClick={[loadGame, d]}>{_cap(d)}</div>
       ))}

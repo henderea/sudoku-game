@@ -8,6 +8,7 @@ export default function MainMenu(): JSX.Element {
     <div class="mainMenu menu">
       <div class="menuButton" onClick={[loadMenu, 'difficultySelect']}>Start Game</div>
       <div class="menuButton" onClick={[loadMenu, 'scores']}>Scores</div>
+      <div class="menuButton" onClick={[loadMenu, 'settings']}>Settings</div>
     </div>
   );
 }
