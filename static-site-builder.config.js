@@ -2,9 +2,37 @@ const _ = require('lodash');
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 module.exports = function(env, mode, paths) {
+  // extra environment content for both environments
+  const commonEnvOverride = {};
+  // extra loaders to add to the start of the list for both environments
+  const commonExtraLoaders = [
+    {
+      test: /\.tsx$/,
+      exclude: [/[/\\\\]node_modules[/\\\\]/],
+      use: [
+        require.resolve('thread-loader'),
+        {
+          loader: require.resolve('babel-loader'),
+          options: {
+            babelrc: false,
+            compact: true,
+            highlightCode: true,
+            configFile: false,
+            presets: ['@babel/preset-env', 'solid', '@babel/preset-typescript'],
+            plugins: ['@babel/plugin-syntax-dynamic-import', '@babel/plugin-proposal-class-properties', '@babel/plugin-proposal-object-rest-spread']
+          },
+        },
+      ]
+    },
+    {
+      test: /\.svg$/,
+      exclude: [/[/\\\\]node_modules[/\\\\]/],
+      use: 'raw-loader'
+    }
+  ];
   if(mode === 'production') {
     // extra environment content
-    const envOverride = {};
+    const envOverride = { ...commonEnvOverride };
     return {
       env: _.extend({}, env, envOverride),
       // extra webpack plugins
@@ -32,31 +60,7 @@ module.exports = function(env, mode, paths) {
       // the max size of assets above which webpack will warn: use null to keep the default, or specify a size with the suffix b, k, m, or g
       maxAssetSize: '1m',
       // extra loaders to add to the start of the list
-      extraLoaders: [
-        {
-          test: /\.tsx$/,
-          exclude: [/[/\\\\]node_modules[/\\\\]/],
-          use: [
-            require.resolve('thread-loader'),
-            {
-              loader: require.resolve('babel-loader'),
-              options: {
-                babelrc: false,
-                compact: true,
-                highlightCode: true,
-                configFile: false,
-                presets: ['@babel/preset-env', 'solid', '@babel/preset-typescript'],
-                plugins: ['@babel/plugin-syntax-dynamic-import', '@babel/plugin-proposal-class-properties', '@babel/plugin-proposal-object-rest-spread']
-              },
-            },
-          ]
-        },
-        {
-          test: /\.svg$/,
-          exclude: [/[/\\\\]node_modules[/\\\\]/],
-          use: 'raw-loader'
-        }
-      ],
+      extraLoaders: [...commonExtraLoaders],
       // extra options for the HtmlWebpackPlugin
       htmlWebpackPluginOptions: {},
       // override options for postcss
@@ -66,7 +70,7 @@ module.exports = function(env, mode, paths) {
     };
   } else {
     // extra environment content
-    const envOverride = {};
+    const envOverride = { ...commonEnvOverride };
     return {
       env: _.extend({}, env, envOverride),
       // extra webpack plugins
@@ -74,31 +78,7 @@ module.exports = function(env, mode, paths) {
       // webpack config overrides
       webpack: {},
       // extra loaders to add to the start of the list
-      extraLoaders: [
-        {
-          test: /\.tsx$/,
-          exclude: [/[/\\\\]node_modules[/\\\\]/],
-          use: [
-            require.resolve('thread-loader'),
-            {
-              loader: require.resolve('babel-loader'),
-              options: {
-                babelrc: false,
-                compact: true,
-                highlightCode: true,
-                configFile: false,
-                presets: ['@babel/preset-env', 'solid', '@babel/preset-typescript'],
-                plugins: ['@babel/plugin-syntax-dynamic-import', '@babel/plugin-proposal-class-properties', '@babel/plugin-proposal-object-rest-spread']
-              },
-            },
-          ]
-        },
-        {
-          test: /\.svg$/,
-          exclude: [/[/\\\\]node_modules[/\\\\]/],
-          use: 'raw-loader'
-        }
-      ],
+      extraLoaders: [...commonExtraLoaders],
       // extra options for the HtmlWebpackPlugin
       htmlWebpackPluginOptions: {},
       // override options for postcss
