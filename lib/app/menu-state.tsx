@@ -1,11 +1,11 @@
 import type { JSX } from 'solid-js';
 import type { Difficulty } from 'lib/sudoku/difficulty';
-import type { GetAndSet } from './utils';
+import type { Observable } from './utils';
 
 // import { createContext, onMount, useContext } from 'solid-js';
 import { createContext, useContext } from 'solid-js';
 
-import { getAndSetSignal } from './utils';
+import { obs } from './utils';
 import { boards } from './game/Boards';
 import { useGrid } from './game/grid-state';
 import { useTimer } from './game/TimerDisplay';
@@ -30,8 +30,8 @@ export type MenuMap<T> = Record<MenuType, T>;
 export const menus: MenuType[] = Object.keys(menuMeta) as MenuType[];
 
 export interface MenuState {
-  get menuType(): GetAndSet<MenuType>;
-  get difficultyLevel(): GetAndSet<Difficulty | null>;
+  get menuType(): Observable<MenuType>;
+  get difficultyLevel(): Observable<Difficulty | null>;
   loadMenu(menu: MenuType): void;
   loadGame(difficulty?: Difficulty | null): void;
 }
@@ -42,8 +42,8 @@ export function MenuProvider(props: { children: any }): JSX.Element {
   const { timer } = useTimer();
   // const { resetBoard, finalTime, newHighScore } = useGrid();
   const { resetBoard } = useGrid();
-  const menuType: GetAndSet<MenuType> = getAndSetSignal('main');
-  const difficultyLevel: GetAndSet<Difficulty | null> = getAndSetSignal(null);
+  const menuType: Observable<MenuType> = obs('main');
+  const difficultyLevel: Observable<Difficulty | null> = obs(null);
   function loadMenu(menu: MenuType): void {
     if(!menuMeta[menu].preserveDifficulty) {
       difficultyLevel.set(null);

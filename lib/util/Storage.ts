@@ -1,6 +1,6 @@
 import type { KeysOfType } from './general';
 import type { Difficulty, DifficultyMap } from 'lib/sudoku/difficulty';
-import type { GetAndSet } from 'lib/app/utils';
+import type { Observable } from 'lib/app/utils';
 
 import { makeDifficultyMap } from 'lib/sudoku/difficulty';
 
@@ -12,7 +12,7 @@ export interface Storage {
   set playCounts(value: DifficultyMap<number>);
 
   setBestTime(difficulty: Difficulty, millis: number): Storage;
-  updateBestTime(difficulty: Difficulty, millis: number, newHighScore: GetAndSet<boolean>): Storage;
+  updateBestTime(difficulty: Difficulty, millis: number, newHighScore: Observable<boolean>): Storage;
 
   incrementPlayCount(difficulty: Difficulty): Storage;
 
@@ -49,7 +49,7 @@ class StorageImpl implements Storage {
     return this.autoSave('saveTimes');
   }
 
-  updateBestTime(difficulty: Difficulty, millis: number, newHighScore: GetAndSet<boolean>): Storage {
+  updateBestTime(difficulty: Difficulty, millis: number, newHighScore: Observable<boolean>): Storage {
     this.autoLoad('loadTimes');
     const currentBest: number = this.bestTimes[difficulty];
     if(currentBest <= 0 || currentBest > millis) {

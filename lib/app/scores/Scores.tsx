@@ -1,6 +1,6 @@
 import type { JSX } from 'solid-js';
 import type { Difficulty, DifficultyMap } from 'lib/sudoku/difficulty';
-import type { GetAndSet } from '../utils';
+import type { Observable } from '../utils';
 
 import { createContext, onMount, useContext } from 'solid-js';
 
@@ -8,12 +8,12 @@ import { _cap, formatTimeAsMinutesSeconds } from 'lib/util/general';
 import { storage } from 'lib/util/Storage';
 import { difficulties, makeDifficultyMap } from 'lib/sudoku/difficulty';
 
-import { getAndSetSignal } from '../utils';
+import { obs } from '../utils';
 import { useMenu } from '../menu-state';
 
 export interface ScoreHolder {
-  get times(): DifficultyMap<GetAndSet<string | null>>;
-  get counts(): DifficultyMap<GetAndSet<number>>;
+  get times(): DifficultyMap<Observable<string | null>>;
+  get counts(): DifficultyMap<Observable<number>>;
   updateScoreInfo(d: Difficulty): void;
   updateScoreInfos(): void;
   resetScores(): void;
@@ -22,8 +22,8 @@ export interface ScoreHolder {
 const ScoreContext = createContext<ScoreHolder>();
 
 export function ScoreProvider(props: { children: any }): JSX.Element {
-  const times: DifficultyMap<GetAndSet<string | null>> = makeDifficultyMap(() => getAndSetSignal(null));
-  const counts: DifficultyMap<GetAndSet<number>> = makeDifficultyMap(() => getAndSetSignal(0));
+  const times: DifficultyMap<Observable<string | null>> = makeDifficultyMap(() => obs(null));
+  const counts: DifficultyMap<Observable<number>> = makeDifficultyMap(() => obs(0));
 
   function updateScoreInfo(d: Difficulty): void {
     const bestTime: number = storage.bestTimes[d];

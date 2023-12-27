@@ -1,39 +1,43 @@
+import type { Signal, Setter } from 'solid-js';
+
 import { createMemo, createSignal } from 'solid-js';
 
-export interface GetAndSet<T> {
-  (): T;
-  set(value: T): void;
+export interface Observable<T> {
+    (): T;
+    set: Setter<T>;
 }
 
-export interface Getter<T> {
-  (): T;
+export interface Computed<T> {
+    (): T;
 }
 
-export function getAndSet<T>(get: () => T, set: (value: T) => void): GetAndSet<T> {
-  const getter = () => get();
+function getAndSet<T>(get: () => T, set: Setter<T>): Observable<T> {
+  const getter: Observable<T> = () => get();
   getter.set = set;
   return getter;
 }
 
-export function getAndSetProxy<T>(orig: () => GetAndSet<T>): GetAndSet<T> {
-  const get = () => orig()();
-  const set = (value: T) => orig().set(value);
-  return getAndSet(get, set);
-}
-
-export function getAndSetSignal<T>(initialValue: T): GetAndSet<T> {
-  const [get, set] = createSignal(initialValue);
+function obs<T, D extends T>(initialValue: D): Observable<T> {
+  const [get, set]: Signal<T> = createSignal<T>(initialValue);
   return getAndSet<T>(get, set);
 }
 
-export function getter<T>(get: () => T): Getter<T> {
+obs.proxy = function obsProxy<T>(orig: () => Observable<T>): Observable<T> {
+  const get = () => orig()();
+  const set: Setter<T> = (value?: any) => orig().set(value);
+  return getAndSet(get, set);
+};
+
+function getter<T>(get: () => T): Computed<T> {
   return get;
 }
 
-export function getterProxy<T>(orig: () => Getter<T>): Getter<T> {
-  return () => orig()();
-}
-
-export function memoGetter<T>(func: () => T): Getter<T> {
+function comp<T>(func: () => T): Computed<T> {
   return getter(createMemo(func));
 }
+
+comp.proxy = function compProxy<T>(orig: () => Computed<T>): Computed<T> {
+  return () => orig()();
+};
+
+export { obs, comp };

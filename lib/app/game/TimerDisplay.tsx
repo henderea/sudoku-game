@@ -1,11 +1,11 @@
 import type { JSX } from 'solid-js';
-import type { GetAndSet } from '../utils';
+import type { Observable } from '../utils';
 
 import { createContext, onCleanup, useContext } from 'solid-js';
 
 import { Stopwatch } from 'lib/util/Stopwatch';
 
-import { getAndSetSignal } from '../utils';
+import { obs } from '../utils';
 
 export interface Timer {
   running(): boolean;
@@ -24,18 +24,18 @@ export interface Timer {
 
 class TimerImpl implements Timer {
   private readonly _stopwatch: Stopwatch;
-  private readonly _running: GetAndSet<boolean>;
-  private readonly _timeDisplay: GetAndSet<string>;
+  private readonly _running: Observable<boolean>;
+  private readonly _timeDisplay: Observable<string>;
   private _interval: number | undefined = undefined;
 
   constructor() {
     this._stopwatch = new Stopwatch();
-    this._running = getAndSetSignal(false);
+    this._running = obs(false);
     this.stopwatch.on('all', (s: Stopwatch) => {
       this._running.set(s.running);
       this._timeDisplay.set(s.currentTime);
     });
-    this._timeDisplay = getAndSetSignal('0:00');
+    this._timeDisplay = obs('0:00');
     onCleanup(() => this.clearTimerInterval());
   }
 

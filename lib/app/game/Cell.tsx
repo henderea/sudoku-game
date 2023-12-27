@@ -1,6 +1,6 @@
 import type { JSX } from 'solid-js';
 import type { CellData } from './grid-state';
-import type { Getter } from '../utils';
+import type { Computed } from '../utils';
 
 import { Show } from 'solid-js';
 
@@ -19,7 +19,7 @@ function HintCell(props: { cell: CellData, value: number }): JSX.Element {
 export default function Cell(props: { index: number }): JSX.Element {
   const { cellGetter } = useGrid();
   const { setCellToSelectionAndAutocomplete, swipe, handleKeyPress } = useGridManagement();
-  const cell: Getter<CellData> = cellGetter(props.index);
+  const cell: Computed<CellData> = cellGetter(props.index);
   return (
     <td classList={{ filled: cell().filled(), justFilled: cell().justFilled(), matchesSelection: cell().matchesSelection(), error: cell().error(), singleHint: cell().hintCount() == 1 }} onClick={[setCellToSelectionAndAutocomplete, cell()]} onTouchStart={[swipe.touchStart.bind(swipe), cell()]} onTouchEnd={swipe.touchEnd.bind(swipe)} onKeyDown={[handleKeyPress, cell()]} tabIndex={0} data-row={cell().row} data-col={cell().column}>
       <Show when={!cell().filled()} fallback={cell().value()}>

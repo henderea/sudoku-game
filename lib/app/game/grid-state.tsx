@@ -1,21 +1,21 @@
 import type { JSX } from 'solid-js';
 import type { KeysOfType } from 'lib/util/general';
 import type { Grid } from 'lib/sudoku/Grid';
-import type { GetAndSet, Getter } from '../utils';
+import type { Observable, Computed } from '../utils';
 
 import { batch, createContext, useContext } from 'solid-js';
 
 import { _times } from 'lib/util/general';
 import { getAcrossFromNumber, getDownFromNumber, getRegionFromNumber, getRowColFromRegionSubIndex } from 'lib/sudoku/utils';
 
-import { getAndSetProxy, getAndSetSignal, getter, getterProxy, memoGetter } from '../utils';
+import { obs, comp } from '../utils';
 
 interface BasicCellData {
-  realValue: GetAndSet<number>;
-  value: GetAndSet<number>;
-  error: GetAndSet<boolean>;
-  filled: Getter<boolean>;
-  justFilled: GetAndSet<boolean>;
+  realValue: Observable<number>;
+  value: Observable<number>;
+  error: Observable<boolean>;
+  filled: Computed<boolean>;
+  justFilled: Observable<boolean>;
   index: number;
   across: number;
   down: number;
@@ -25,24 +25,24 @@ interface BasicCellData {
 }
 
 export interface CellData extends BasicCellData {
-  autoHints: Getter<boolean[]>;
-  removedHints: GetAndSet<boolean>[];
-  hints: Getter<boolean[]>;
-  hintCount: Getter<number>;
-  matchesSelection: Getter<boolean>;
+  autoHints: Computed<boolean[]>;
+  removedHints: Observable<boolean>[];
+  hints: Computed<boolean[]>;
+  hintCount: Computed<number>;
+  matchesSelection: Computed<boolean>;
 }
 
 export interface GridState {
-  get selection(): GetAndSet<number>;
-  get gameComplete(): GetAndSet<boolean>
-  get newHighScore(): GetAndSet<boolean>;
-  get finalTime(): GetAndSet<string>;
-  get completedNumbers(): Getter<boolean>[];
+  get selection(): Observable<number>;
+  get gameComplete(): Observable<boolean>
+  get newHighScore(): Observable<boolean>;
+  get finalTime(): Observable<string>;
+  get completedNumbers(): Computed<boolean>[];
   getData(): CellData[];
   getCell(n: number): CellData;
   getCellRC(r: number, c: number): CellData;
   getCellRS(r: number, s: number): CellData;
-  cellGetter(n: number): Getter<CellData>;
+  cellGetter(n: number): Computed<CellData>;
   resetBoard(full: Grid, grid: Grid): void;
 }
 
@@ -50,11 +50,11 @@ const GridContext = createContext<GridState>();
 
 export function GridProvider(props: { children: any }): JSX.Element {
   function basicCellData(index: number): BasicCellData {
-    const realValue = getAndSetSignal(0);
-    const value = getAndSetSignal(0);
-    const error = getAndSetSignal(false);
-    const filled = memoGetter(() => value() > 0);
-    const justFilled = getAndSetSignal(false);
+    const realValue: Observable<number> = obs(0);
+    const value: Observable<number> = obs(0);
+    const error: Observable<boolean> = obs(false);
+    const filled: Computed<boolean> = comp(() => value() > 0);
+    const justFilled: Observable<boolean> = obs(false);
     const across: number = getAcrossFromNumber(index + 1);
     const down: number = getDownFromNumber(index + 1);
     const region: number = getRegionFromNumber(index + 1);
@@ -62,10 +62,10 @@ export function GridProvider(props: { children: any }): JSX.Element {
     const column: number = across - 1;
     return { realValue, value, filled, justFilled, error, index, across, down, region, row, column };
   }
-  const selection: GetAndSet<number> = getAndSetSignal(1);
-  const gameComplete: GetAndSet<boolean> = getAndSetSignal(false);
-  const newHighScore: GetAndSet<boolean> = getAndSetSignal(false);
-  const finalTime: GetAndSet<string> = getAndSetSignal('0:00');
+  const selection: Observable<number> = obs(1);
+  const gameComplete: Observable<boolean> = obs(false);
+  const newHighScore: Observable<boolean> = obs(false);
+  const finalTime: Observable<string> = obs('0:00');
   const basicData: BasicCellData[] = _times(81, (i: number) => basicCellData(i));
   function computeAutoHints(n: number): boolean[] {
     const cell: BasicCellData = basicData[n];
@@ -82,20 +82,20 @@ export function GridProvider(props: { children: any }): JSX.Element {
     return remainingValues;
   }
 
-  function computeHints(filled: boolean, autoHints: boolean[], removedHints: GetAndSet<boolean>[]): boolean[] {
+  function computeHints(filled: boolean, autoHints: boolean[], removedHints: Observable<boolean>[]): boolean[] {
     return _times(10, (i: number) => i > 0 && !filled && autoHints[i] && !removedHints[i]());
   }
 
-  function getAndSetProxyNumber<K extends KeysOfType<BasicCellData, GetAndSet<number>>>(i: number, key: K): GetAndSet<number> {
-    return getAndSetProxy(() => basicData[i][key]);
+  function obsProxyNumber<K extends KeysOfType<BasicCellData, Observable<number>>>(i: number, key: K): Observable<number> {
+    return obs.proxy(() => basicData[i][key]);
   }
 
-  function getAndSetProxyBoolean<K extends KeysOfType<BasicCellData, GetAndSet<boolean>>>(i: number, key: K): GetAndSet<boolean> {
-    return getAndSetProxy(() => basicData[i][key]);
+  function obsProxyBoolean<K extends KeysOfType<BasicCellData, Observable<boolean>>>(i: number, key: K): Observable<boolean> {
+    return obs.proxy(() => basicData[i][key]);
   }
 
-  function getterProxyBoolean<K extends KeysOfType<BasicCellData, Getter<boolean>>>(i: number, key: K): Getter<boolean> {
-    return getterProxy(() => basicData[i][key]);
+  function compProxyBoolean<K extends KeysOfType<BasicCellData, Computed<boolean>>>(i: number, key: K): Computed<boolean> {
+    return comp.proxy(() => basicData[i][key]);
   }
 
   function matchesValue(value: number, currentValue: number, hints: boolean[]): boolean {
@@ -103,16 +103,16 @@ export function GridProvider(props: { children: any }): JSX.Element {
   }
 
   function cellData(index: number): CellData {
-    const realValue = getAndSetProxyNumber(index, 'realValue');
-    const value = getAndSetProxyNumber(index, 'value');
-    const filled = getterProxyBoolean(index, 'filled');
-    const justFilled = getAndSetProxyBoolean(index, 'justFilled');
-    const error = getAndSetProxyBoolean(index, 'error');
-    const autoHints = memoGetter(() => computeAutoHints(index));
-    const removedHints = _times(10, () => getAndSetSignal(false));
-    const hints = memoGetter(() => computeHints(filled(), autoHints(), removedHints));
-    const hintCount = memoGetter(() => hints().filter((h) => h).length);
-    const matchesSelection = memoGetter(() => matchesValue(selection(), value(), hints()));
+    const realValue: Observable<number> = obsProxyNumber(index, 'realValue');
+    const value: Observable<number> = obsProxyNumber(index, 'value');
+    const filled: Computed<boolean> = compProxyBoolean(index, 'filled');
+    const justFilled: Observable<boolean> = obsProxyBoolean(index, 'justFilled');
+    const error: Observable<boolean> = obsProxyBoolean(index, 'error');
+    const autoHints: Computed<boolean[]> = comp(() => computeAutoHints(index));
+    const removedHints: Observable<boolean>[] = _times(10, () => obs(false));
+    const hints: Computed<boolean[]> = comp(() => computeHints(filled(), autoHints(), removedHints));
+    const hintCount: Computed<number> = comp(() => hints().filter((h) => h).length);
+    const matchesSelection: Computed<boolean> = comp(() => matchesValue(selection(), value(), hints()));
     const { across, down, region, row, column } = basicData[index];
     return { realValue, value, filled, justFilled, error, autoHints, removedHints, hints, hintCount, matchesSelection, index, across, down, region, row, column };
   }
@@ -127,19 +127,19 @@ export function GridProvider(props: { children: any }): JSX.Element {
     return getCellRC(row - 1, col - 1);
   }
 
-  function cellGetter(n: number): Getter<CellData> {
-    return memoGetter(() => getCell(n));
+  function cellGetter(n: number): Computed<CellData> {
+    return comp(() => getCell(n));
   }
 
   function countNumber(num: number): number {
     return getData().filter((c: CellData) => c.value() == num).length;
   }
 
-  const completedNumbers: Getter<boolean>[] = _times(10, (i: number) => {
+  const completedNumbers: Computed<boolean>[] = _times(10, (i: number) => {
     if(i == 0) {
-      return getter(() => false);
+      return () => false;
     }
-    return memoGetter(() => countNumber(i) == 9);
+    return comp(() => countNumber(i) == 9);
   });
 
   function resetBoard(full: Grid, grid: Grid) {
