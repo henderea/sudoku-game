@@ -4,7 +4,6 @@
     },
     "editor.tabSize": 2,
     "eslint.alwaysShowStatus": true,
-    "eslint.packageManager": "yarn",
     "eslint.validate": [
       "javascript",
       "javascriptreact",
