@@ -4,7 +4,7 @@ import './index.scss';
 //import _ from 'lodash';
 //import rand from 'lodash/rand';
 
-import 'lib/app/index.tsx';
+import 'lib/app/index';
 
 // @ts-ignore
 import registerServiceWorker from '@henderea/static-site-builder/registerServiceWorker';
